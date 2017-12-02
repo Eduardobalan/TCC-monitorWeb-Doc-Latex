@@ -1,0 +1,121 @@
+% Monitoramento de servidores Linux por web sites.
+%====================================================================================================
+% TCC
+%----------------------------------------------------------------------------------------------------
+% Autor				    : Eduardo Balan
+% Orientador		  : Kleber Krugrer
+% Instituição 		: UFMS - Universidade Federal do Mato Grosso do Sul
+% Departamento		: CPCX - Sistema de Informação
+%----------------------------------------------------------------------------------------------------
+% Data de criação	: 29 de Março de 2017
+%====================================================================================================
+
+\chapter{Metodologia} \label{cap:metodologia}
+
+Neste Capítulo são apresentadas as ferramentas utilizados neste trabalho de acordo com a literatura estudada. Na seção \ref{sec:SpringFramework} explica-se sobre o \textit{Spring Framework} e seus diversos modulos. 
+
+\section{Spring Framework}\label{sec:SpringFramework}
+
+O \textit{Spring Framework} fornece um modelo abrangente de programação e configuração para aplicativos corporativos modernos baseados em Java - em qualquer tipo de plataforma de implantação. Um elemento-chave do \textit{Spring} é o suporte infra-estrutural no nível de aplicação: o \textit{Spring} se concentra no \textit{core}(Núcleo) de aplicativos corporativos para que as equipes possam se concentrar na lógica comercial de nível de aplicativo \cite{SpringFramework:2017}.
+
+\textit{Spring} é um projeto de código aberto. Possui uma comunidade grande e ativa que fornece \textit{feedback} contínuo com base em uma ampla gama de casos de uso do mundo real. Isso ajudou a \textit{Spring} a evoluir com êxito \cite{SpringFramework:2017}.
+
+O \textit{Spring Framework} é dividido em módulos. As aplicações podem escolher quais módulos eles precisam. No \textit{core} são os módulos do núcleo, incluindo um módulos de configuração e um mecanismo de injeção de dependência. Além disso, o \textit{Spring Framework} fornece suporte fundamental para diferentes arquiteturas de aplicativos, incluindo mensagens, dados transacionais e persistência, e \textit{web}. Inclui também a estrutura \textit{web} \textit{Spring MVC} baseada em \textit{Servlet} \cite{SpringFramework:2017}.
+
+\subsection{\textit{Spring Boot}}\label{subsec:SpringBoot}
+
+A primeira versão do Spring Boot veio da necessidade de o Spring Framework ter suporte a servidores web embutidos. Depois, a equipe do Spring percebeu que existiam outras pendências também, como fazer aplicações prontas para nuvem (cloud-ready applications) \cite{Boagrio:2017}.
+
+Atualmente o \textit{Spring Boot} é considerado um facilitador para a criação de aplicativos baseados em \textit{spring}, para que não seja necessário ficar perdendo tempo configurando diversas recursos nem mesmo um servidor de aplicação \cite{springBoot:2017}. O \textit{Spring Boot} é capaz de interagir com diversos banco de dados, mainframe, realiza transação distribuída, e torna qualquer plataforma confiável para executar os seus sistemas \cite{Boagrio:2017}.
+
+O \textit{Spring Boot} tem um conceito na especificação JEE, que acelera o desenvolvimento e simplifica bastante a vida de quem trabalha com aplicações do \textit{Spring Framework} \cite{Boagrio:2017}.
+
+\subsection{spring-boot-test}\label{subsec:SpringTest}
+
+O \textit{Spring boot test} é a biblioteca \textit{Spring} responsável pelos testes automatizados que foram  visto no \autoref{sec:TestesAutomatizados}. A intenção dessa biblioteca é fazer os testes ficarem o mais fáceis possíveis através de anotações e injeção de dependência para tornar seu código menos dependente de diversos \textit{Framework} do que seria com o desenvolvimento Java EE tradicional. 
+O \textit{Spring Boot Test} incorpora em seu projeto diversas bibliotecas, algumas delas podem ser vistas a seguir \cite{springBootTest:2017}:
+
+\subsubsection{JUnit}\label{subsec:JUnit}
+	
+	A plataforma JUnit é um \textit{framework} para facilitar a criação de testes de unidade e em especial sua execução. Ele possui alguns métodos que tornam o código de teste bem legível e fácil de fazer as asserções \cite{junit:2017}.
+
+Uma asserção é uma afirmação. Algumas vezes em determinados pontos do teste é preciso garantir que uma variável tenha um determinado valor, casso isso não ocorra, o teste deve indicar uma falha a ser reportada para o programado, indicando um possível bug \cite{junit:2017}.
+	
+\subsubsection{Hamcrest}\label{subsec:Hamcrest}
+
+	É uma biblioteca que trabalha com tratamento de objetos matcher que nada mais é do que uma classe cuja função é verificar se um dado objeto tem as propriedades desejadas. \cite{hamcrest:2017}.
+
+\subsubsection{Mockito}\label{subsec:Mockito}
+	
+	Um teste unitário deve testar uma funcionalidade isoladamente. Os efeitos secundários de outras classes ou do sistema devem ser eliminados  se possível. Isso pode ser feito através da utilização do Mockito. Com ele é possível simular que métodos foram chamados, criar objetos falsos, simular uma resposta do banco de dados e simular respostas de métodos \cite{mockito:2017}.
+
+\subsubsection{JsonPath}\label{subsec:JsonPath}
+
+	É um  DSL(Domain Specific Languages) para ler documentos JSON, ela oferece aos desenvolvedores uma manira simples de extrair dados específicos de um json \cite{JsonPath:2017}.
+
+
+\subsection{Spring-Data}\label{subsec:SpringData}
+
+A missão da \textit{Spring Data} é fornecer um modelo de programação familiar e consistente, baseado em \textit{Spring}, para acesso a dados. Este módulo facilita o uso de tecnologias de acesso a dados, bancos de dados relacionais e não-relacionais, estruturas de redução de mapas e serviços de dados baseados em nuvem \cite{springData:2017}. Ele abstrai para o desenvolvedor aqueles detalhes repetitivos das implementação de acessos a dados, através de \textit{templates} \cite{Weissmann:2012}.
+
+Este projeto contém muitos subprojetos específicos de banco de dados. Os projetos são desenvolvidos trabalhando em conjunto com muitas das empresas e desenvolvedores dessas tecnologias \cite{springData:2017}.
+
+
+\subsubsection{Spring-Data-jpa}\label{subsubsec:SpringDatajpa}
+
+\textit{Spring Data JPA} visa melhorar significativamente a implementação da camadas de acesso a dados, reduzindo o esforço para a quantidade minima necessária. Suas interfaces de repositório incluindo métodos de busca personalizados, e o \textit{Spring} irá fornecer a implementação de acesso aos dados automaticamente \cite{springDataJpa:2017}.
+
+
+
+\section{Apache Maven}\label{sec:ApacheMaven}
+
+Apache Maven é uma ferramenta que pode ser usada para construir e gerenciar qualquer projeto baseado em Java. Ele permite que um projeto seja construído usando um arquivo POM.xml (Modelo de Objeto de Projeto) dentro desse arquivo são declaradas as dependências e características do seu projeto. Quando o Maven é executado ele faz a leitura desse arquivo e realiza o \textit{donwload} das dependências em formato JAR (Java ARchive) necessários para construir. Os arquivos JAR ficam em um reposiciono central e isso permite aos usuários do Maven reutilizar JARs em todos os projetos e incentiva a comunicação entre projetos para garantir que os problemas de compatibilidade com versões anteriores sejam tratados \cite{ApacheFeature:2017}.
+
+
+No \autoref{Func:ExemploPom} pode ser visto um exemplo de um arquivo POM e o comentário (<!-- comentário -->) em cada linha.
+
+%No \autoref{Func:ExemploPom} pode ser visto um exemplo de um arquivo pom em formato XML e a seguir uma lista detalhada explicando o arquivo.
+%\begin{itemize}
+%		\item \autoref{Func:ExemploPom}, linha 1 - <project> - Informa para o Maven onde inicia e onde termina o projeto \cite{ApacheFeature:2017}.
+%		\item \autoref{Func:ExemploPom}, linha 2 - <modelVersion> - Informa a versão do arquivo pom, que atualmente é a versão 4.0.0 \cite{ApacheFeature:2017}.
+%		\item \autoref{Func:ExemploPom}, linha 3 - <groupId> - É o identificador da empresa/grupo ao qual o projeto pertence \cite{ApacheFeature:2017}. Normalmente é nome do site da empresa/grupo ao contrário.
+%		\item \autoref{Func:ExemploPom}, linha 4 - <artifactId> - o nome do projeto \cite{ApacheFeature:2017}.
+%		\item \autoref{Func:ExemploPom}, linha 5 - <version> - Versão do projeto \cite{ApacheFeature:2017}.
+%		\item \autoref{Func:ExemploPom}, linha 7 - <dependencies> - Informa para o Maven onde inicia e onde termina as dependencias \textit{tag} \cite{ApacheFeature:2017}.
+%		\item \autoref{Func:ExemploPom}, linha 8 - <dependency> - Informa uma dependência.
+%		\item \autoref{Func:ExemploPom}, linha 9 - <groupId> - É o identificador da empresa/grupo ao qual a dependencia pertence \cite{ApacheFeature:2017}.
+%		\item \autoref{Func:ExemploPom}, linha 10 - <artifactId> - Indica o nome da dependência \cite{ApacheFeature:2017}.
+%		\item \autoref{Func:ExemploPom}, linha 11 - <version> - Qual a versão da dependencia \cite{ApacheFeature:2017}.
+%\end{itemize}
+
+
+\begin{lstlisting}[style=XML,label=Func:ExemploPom,caption={[pom.]pom.}]
+<project> <!-- Informa o inicio do arquivo -->
+	<modelVersion>4.0.0</modelVersion><!-- Versão do arquivo POM -->
+	<groupId>br.com.monitorweb</groupId><!-- Grupo ao qual o projeto pertence -->
+	<artifactId>monitorweb-api</artifactId><!-- Nome do projeto -->
+	<version>1.0</version><!-- Versão do projeto -->
+	
+	<dependencies><!-- Informa o inicio das dependências -->
+  
+		<dependency><!-- Informa o inicio de uma dependência. -->
+			<groupId>org.springframework.boot</groupId><!-- Grupo ao qual o projeto a dependência -->
+			<artifactId>spring-boot-starter</artifactId><!-- Nome da dependência -->
+			<version>1.5.9.RELEASE</version><!-- Versão da dependenteia -->
+		</dependency><!-- Informa o fim de uma dependência. -->
+	
+	</dependencies><!-- Informa o fim das dependências -->
+	
+</project><!-- Informa o fim do arquivo -->
+\end{lstlisting}
+
+
+
+\section{Boost}\label{sec:Boost}
+
+\subsubsection{Asio}\label{subsubsec:Asio}
+
+\subsubsection{Ptree}\label{subsubsec:Ptree}
+
+
+

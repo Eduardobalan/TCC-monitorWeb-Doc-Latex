@@ -1,0 +1,61 @@
+% Monitoramento de servidores Linux por web sites.
+%====================================================================================================
+% TCC
+%----------------------------------------------------------------------------------------------------
+% Autor				    : Eduardo Balan
+% Orientador		  : Kleber Krugrer
+% Instituição 		: UFMS - Universidade Federal do Mato Grosso do Sul
+% Departamento		: CPCX - Sistema de Informação
+%----------------------------------------------------------------------------------------------------
+% Data de criação	: 29 de Março de 2017
+%====================================================================================================
+
+\chapter{Introdução} \label{Cap:Introducao}
+
+A Internet é uma rede de computadores que interconecta milhares de dispositivos computacionais ao redor do mundo com centenas de milhares de usuários. Há pouco tempo, esses dispositivos eram basicamente computadores de mesa e servidores que realizavam diversas tarefas, como armazenamento e distribuição de dados e arquivos, gerenciamento de impressão e de usuários, conexão a outras redes, transmissão de informações tais como páginas da \textit{web} e mensagens de e-mail, além de outras funcionalidades \cite{Kurose:2010}. Com frequência, essas máquinas assim chamadas servidores são instaladas e mantidas em um local central de uma empresa por um administrador de sistemas \cite{Tanenbaum:2003}. 
+
+Nos últimos tempos houve uma mudança, que é o uso da \textit{web} não apenas para comunicação, mas como uma forma de executar aplicativos.  Agora temos processadores de texto, planilhas e outros programas sendo executados como uma aplicação \textit{web} em um navegador, em que suas principais informações ficam armazenadas nos servidores \cite{Marimoto:2011}. Uma vez que os dados dos usuários estão armazenados em locais remotos algumas vantagens podem ser obtidas, tais como \textit{self-service} sob demanda e amplo acesso à rede, \cite{Sampaio:2003}  mas por outro lado, manter estes dados seguros é imprescindível e o acompanhamento destes servidores é uma forma de garantia. É fácil perceber que a queda de um servidor pode comprometer a produtividade de usuários, principalmente se esse servidor for o único disponível ou se estiver executando serviços vitais \cite{Weber:2002}.
+
+Cabe observar, que segundo Carlos E. Marimoto, pouco a pouco, a internet tem se tornado o verdadeiro computador, e os computadores passam a ser cada vez mais um simples terminal, cuja única função é mostrar informações processadas por servidores remotos. Isso se tornou possível devido à popularização da ADSL (\textit{Assymetrical Digital Subscriber Line}), \textit{wireless} e outras formas de acesso rápido e contínuo à internet. Futuramente, a tendência é que mais aplicativos passem a ser usados via \textit{web}, tornando um computador desconectado cada vez mais limitado e inútil. Eventualmente, é possível que o próprio computador seja substituído por dispositivos mais simples e baratos, que sirvam como terminais de acesso \cite{Marimoto:2011}.
+
+\section{Justificativa}
+
+Muitas empresas detêm valiosas informações guardadas em seus servidores, que podem ser de ordem técnica (por exemplo, o projeto de um novo \textit{chip} ou novo \textit{software}), comercial (como estudos sobre competidores ou planos de \textit{marketing}), financeira (planos para uma venda de ações), jurídica (documentos sobre uma possível fusão ou aquisição), entre outras possibilidades. Além das ameaças causadas por invasores, dados valiosos podem ser perdidos por acidente. Algumas das causas comuns de perda acidental de dados são fenômenos naturais, como enchentes, terremotos, guerras, motins; erros de hardware ou de software (defeitos na CPU, discos ou fitas com problemas de leitura, surtos ou falhas de energia, sujeira,  erros de programas e temperaturas extremas); e erros humanos (entrada incorreta de dados, montagem incorreta de disco ou fita, execução de programas errado, entre outro) \cite{Tanenbaum:2010,Silberschatz:2000}.
+
+
+Em 27 de dezembro de 2005, um incêndio destruiu seis dos dez andares do  prédio do INSS (Instituto Nacional de Seguro Social), em  Brasília \cite{Laudo:2006}. Segundo o ministro da Previdência e Assistência Social da época, Nelson Machado, as maiores perdas foram de informações de receita previdenciária, informações do sistema central e processos físicos, dívidas de empresas, processos de fraudes e autos de infração \cite{Machado:2005}. O presidente da Comissão de Fiscalização e Controle da Câmara dos Deputados, deputado Alexandre Cardoso, estimou, que os prejuízos, naquela época, referentes à processos administrativos foram equivalentes a R\$ 60 bilhões, tendo a previdência cópias de pelo menos R\$ 53 bilhões, concluindo que a união teria perdido em torno de R\$7 bilhões \cite{Futema:2005}.
+
+
+A maioria dessas causas podem ser tratadas com a manutenção adequada dos \textit{backups}, preferivelmente em lugar distante dos dados originais. Embora proteger dados de perda acidental possa parecer banal, se comparado a proteger contra invasores inteligentes, na prática provavelmente mais danos são causados pelo primeiro que pelo ultimo \cite{Tanenbaum:2003, Silberschatz:2000}.
+
+\section{Objetivos} \label{Sec:Objetivos}
+
+\subsection{Objetivo Geral} \label{Sec:ObjetivoGeral}
+
+O objetivo deste trabalho é estudar as formas utilizadas para prevenir erros, e aplicar esse técnicas na  criação de ferramentas de monitoramento para servidores. Todas as informações de monitoramento ficarão a disposição de seus usuários através de um \textit{web} site central, facilitando o trabalho de acompanhamento das rotinas dos servidores, e prevenções de problemas futuros.
+
+
+\subsection{Objetivos Específicos}\label{Sec:ObjetivosEspecificos}
+\begin{itemize}
+	\item Pesquisar as principais formas utilizadas para prevenir os erros em servidores e identificando os pontos mais vulneráveis.
+	
+	\item Estudar como fazer leituras de informações do hardware,  tais como dados dos discos rígidos, processador, memória, temperatura da placa mãe, etc...
+	
+	\item	Criar um \textit{web} site para visualizar as informações dos servidores.
+
+	\item Criar uma API para sincronizar as informações entre o sistema e \textit{web} site.
+\end{itemize}
+
+
+\newpage
+
+\section{Organização da Proposta} \label{Sec:Organizacao}
+
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+No Capítulo 2 são apresentados os conceitos utilizados neste trabalho de acordo com a literatura estudada. Na Seção \ref{sec:falhaErroDefeito} explica-se os conceitos de falha, erro e defeito ou modelo de três universos. Na Seção \ref{sec:radiacao} são descritas as principais fontes de radiação e seus efeitos nos circuitos eletrônicos.  O conceito de ``dependabilidade'' é explicado na Seção \ref{sec:denpendabilidade} e na Seção \ref{sec:tolerancia} explica-se o conceito geral de tolerância a falhas e os atributos necessários para que uma falha seja definida. Na seção \ref{sec:tecnica} são apresentadas as principais técnicas de tolerância a falhas e na seção \ref{sec:InjecaoDeFalhas} as principais técnicas de injeção de falhas.
+
+As modificações realizadas nas bibliotecas e a criação da classe \textit{TData} são exibidas no Capítulo 3, dividido em três seções. Na Seção \ref{sec:InjetorDeFalhas} são apresentadas as implementações e as modificações realizadas na biblioteca \textit{FaultInjector}. Na Seção \ref{sec:extensaoBiblioteca} é exibida a extensão da biblioteca \textit{FaultRecovery}. Na Seção \ref{sec:classeTData} são exibidas as implementações realizadas para criação da classe \textit{TData}, sua utilização é explicada mediante exemplos.
+
+No Capítulo \ref{cap:Resultados} são exibidos os resultados encontrados após os testes de tempo de execução e tolerância a falhas em que foram expostas as bibliotecas \textit{FaultInjector}, \textit{FaultRecovery} e a classe \textit{TData}. No Capítulo \ref{cap:conclusao} são exibidas as considerações finais deste trabalho.
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
