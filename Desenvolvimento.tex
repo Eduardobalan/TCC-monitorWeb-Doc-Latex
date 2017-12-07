@@ -12,12 +12,12 @@
 
 \chapter{Desenvolvimento}\label{cap:Desenvolvimento}
 
-Neste trabalho foi desenvolvido um sistema para monitoramento de servidores linux, utilizando a arquitetura cliente-servidor.
-O sistema consiste em duas aplicações, uma desenvolvida em java que é um \textit{web service} para a qual foi dado o nome de \textbf{MonitorWeb-Api}. A outra aplicação em C++ que sera executada nos servidores linux cliente e tem o nome de \textbf{MonitorWeb-Cli}.
+Neste trabalho foi desenvolvido um sistema para monitoramento de servidores Linux, utilizando a arquitetura cliente-servidor.
+O sistema consiste em duas aplicações, um \textit{web service} desenvolvido em Java para o qual foi dado o nome de MonitorWeb-Api, e outra aplicação em C++, executada nos servidores Linux como cliente, tendo o nome de MonitorWeb-Cli.
 
-O MonitorWeb-Cli ira realizar leitura dos dados de seu hospedeiro tais como CPU(Central Processing Unit), memoria, banco dados e swap. Esse procedimento sera realizado de acordo com a configuração de tempo que o usuário desejar. Para cada leitura realizada o sistema realiza um envio dos dados para o MonitorWeb-Api. Ele também pode realizar rotinas de \textit{backups}(cópia de segurança) e \textit{vaccum}(Processo de limpeza no banco de dados) do banco dados PostgreSQL tanto no hospedeiro quanto em outro computador a qual ele tenha acesso pela rede. Após efetuar um desses procedimento ele também envia uma mensagem para o MonitorWeb-Api que por sua vez armazena essas informações.
+O MonitorWeb-Cli realiza leitura dos dados de seu hospedeiro, tais como CPU (\textit{Central Processing Unit}), memória, banco dados e \textit{swap}. Esse procedimento é realizado de acordo com a configuração de tempo desejada pelo usuário. Para cada leitura realizada, o sistema realiza o envio dos dados para o MonitorWeb-Api. Ele também pode realizar rotinas de \textit{backups} (cópia de segurança) e \textit{vaccum} (processo de limpeza no banco de dados) do banco dados PostgreSQL, tanto no hospedeiro quanto em outro computador a qual tenha acesso pela rede. Após efetuar esses procedimentos, o MonitorWeb-Cli envia mensagens para o MonitorWeb-Api que por sua vez armazena essas informações.
 
-O MonitorWeb-Api é responsável por receber os dados de todos os MonitorWeb-Cli, e realizar a persistência no banco de dados. Ele também pode ser utilizado para disponibilizar esse dados para outras aplicações.
+Um MonitorWeb-Api é responsável por receber os dados de diversos MonitorWeb-Cli e realizar a persistência no banco de dados. Também é responsável por armazenar as configurações dos clientes, tais como o intervalo de envio dos dados de monitoramento e as informações dos procedimentos de \textit{backup}. Essas configurações são capturadas periodicamente conforme as configurações do usuário. A \textbf{API} também pode ser utilizada para disponibilizar os dados dos servidores para aplicações de \textit{frontend} (DEFINIR O QUE É FRONTEND).
 
 
 %Como visto no capitulo \autoref{sec:ArquiteturaClienteServidor}, na arquitetura cliente-servidor, há um hospedeiro sempre em funcionamento denominado servidor, que atende a requisições de muitos outros hospedeiros. Para essa sistema foi dada nome de MonitorWeb-Api. Do outro lado dessa arquitetura temos os sistemas denominados clientes, e estes podem estar em funcionamento às vezes ou sempre. Para esse sistema foi dado o nome de MonitorWeb-Cli.
@@ -26,21 +26,21 @@ O MonitorWeb-Api é responsável por receber os dados de todos os MonitorWeb-Cli
 
 \section{MonitorWeb-Api}\label{sec:MonitorWeb-Api}
 
-O MonitorWeb-Api, é um \textit{web Service} desenvolvido utilizando a tecnologia Spring-boot, para o desenvolvimento de uma aplicação ReST que utiliza o protocolo HTTP/1.1 na comunicação com sistema clientes. A forma de passar dados entre os sistema foi utilizado o JSON (\textit{JavaScript Object Notation}) em vez do XML por ter sua estrutura menor e consumir menos trafego na rede \cite{Saudate:2014}. Para a persistência dos dados foi utilizado o banco de dados PostgreSQL.
+O MonitorWeb-Api é um \textit{web service} desenvolvido utilizando a tecnologia \textit{Spring-boot} para o desenvolvimento de uma aplicação ReST que utiliza o protocolo HTTP/1.1 na comunicação com sistema clientes. A forma de passar dados entre os sistema foi utilizado o JSON (\textit{JavaScript Object Notation}) em vez do XML por ter sua estrutura menor e consumir menos trafego na rede \cite{Saudate:2014}. Para a persistência dos dados foi utilizado o banco de dados PostgreSQL [\cite{Postgres}].
 
-O MonitorWeb-Api possui uma classe central chamado de Servidor. A partir do cadastro de um objeto dessa classe e o cadastro de um objeto da classe ServidorConfig e ambos estando relacionados, a aplicação já esta configurada para trabalhar com o MonitorWeb-Cli. Na \autoref{Tab:VariaveisServidor} e na \autoref{Tab:VariaveisServidorConfig} estão as variáveis e descrição das classe Servidor e ServidorConfig respectivamente. Como realizar o cadastro desses recursos sera mostrado na \autoref{subsec:ComsumindoRecursos}. 
+Um MonitorWeb-Api possui a capacidade de trabalhar com diversos MonitorWeb-Cli simultaneamente. A classe Servidor, descrita na \autoref{Tab:VariaveisServidor} representa o MonitorWeb-Cli.
 
+A \autoref{subsec:ComsumindoRecursos} descreve como realizar o cadastro dos recursos ReST do \textit{web-service}. 
 
-% Please add the following required packages to your document preamble:
-% \usepackage[table,xcdraw]{xcolor}
-% If you use beamer only pass "xcolor=table" option, i.e. \documentclass[xcolor=table]{beamer}
+%O MonitorWeb-Api possui uma classe central chamado de Servidor. A partir do cadastro de um objeto dessa classe e o cadastro de um objeto da classe ServidorConfig e ambos estando relacionados, a aplicação já esta configurada para trabalhar com o MonitorWeb-Cli. Na \autoref{Tab:VariaveisServidor} e na \autoref{Tab:VariaveisServidorConfig} estão as variáveis e a descrição das classe Servidor e ServidorConfig respectivamente. Como realizar o cadastro desses recursos é mostrado na \autoref{subsec:ComsumindoRecursos}. 
+
 \begin{table}[!ht]
 \centering
 \begin{tabular}{|l|l|}
 \hline
 {\color[HTML]{000000} \textbf{Variáveis}} & {\color[HTML]{000000} \textbf{Descriçães}}                                                                \\ \hline
 id                                     & \multicolumn{1}{p{13.00cm}|}{Número único para cada objeto do tipo Servidor. (Gerado Automaticamente) }\\ \hline
-dominio                                & \multicolumn{1}{p{13.00cm}|}{A qual domínio o servidor pertence (Não obrigatório)} \\ \hline
+dominio                                & \multicolumn{1}{p{13.00cm}|}{A qual domínio o servidor pertence. (Não obrigatório). Esse atributo sera tratado na \autoref{subsubsec:DiagramaClasseUsuarios}} \\ \hline
 dthr\_cadastro                         & \multicolumn{1}{p{13.00cm}|}{Data e hora do cadastro. (Valor gerado automaticamente)} \\ \hline
 nome                                   & \multicolumn{1}{p{13.00cm}|}{Nome que o usuário deseja dar ao servidor.}  \\ \hline
 empresa                                & \multicolumn{1}{p{13.00cm}|}{Nome da empresa (Não obrigatório)} \\ \hline
@@ -50,77 +50,171 @@ observacao                             & \multicolumn{1}{p{13.00cm}|}{Alguma obs
 \label{Tab:VariaveisServidor}
 \end{table}
 
-% Please add the following required packages to your document preamble:
-% \usepackage[table,xcdraw]{xcolor}
-% If you use beamer only pass "xcolor=table" option, i.e. \documentclass[xcolor=table]{beamer}
-\begin{table}[!ht]
-\centering
-\begin{tabular}{|l|l|}
-\hline
-{\color[HTML]{000000} \textbf{Variáveis}} & {\color[HTML]{000000} \textbf{Descriçães}} \\ \hline
-id                                     & \multicolumn{1}{p{10.00cm}|}{Número único para cada objeto do tipo ServidorConfig. (Gerado Automaticamente)} \\ \hline
-servidor                               & \multicolumn{1}{p{10.00cm}|}{Indica com qual servidor esse registro esta relacionado.}
-\\ \hline
-dthr\_cadastro                         & \multicolumn{1}{p{10.00cm}|}{Data e hora do cadastro. (Gerado Automaticamente)}\\ \hline
-dthr\_alteracao                        & \multicolumn{1}{p{10.00cm}|}{Data e hora que foi realizado a ultima alteração. (Gerado Automaticamente)}\\ \hline
-intervaloLeituraConfiguracoes          & \multicolumn{1}{p{10.00cm}|}{De quantos em quantos segundos o MonitorWeb-Cli deve ler esse arquivo de configurações, e se reconfigurar(Valor \textit{default} 120 s).} \\ \hline
-intervaloLeituraConfiguracoesDb        & \multicolumn{1}{p{10.00cm}|}{De quantos em quantos segundos o MonitorWeb-Cli deve ler as configurações do banco de dados, e se reconfigurar(Valor \textit{default} 120 s).} \\ \hline
-intervaloCpu                           & \multicolumn{1}{p{10.00cm}|}{De quantos em quantos segundos o MonitorWeb-Cli deve enviar um registro da classe MonitoramentoCpu.(Valor \textit{default} 1 s)}\\ \hline
-intervaloMemoria                       & \multicolumn{1}{p{10.00cm}|}{De quantos em quantos segundos o MonitorWeb-Cli deve enviar um registro da classe MonitoramentoMemoria.(Valor \textit{default} 1 s)}\\ \hline
-intervaloSwap                          & \multicolumn{1}{p{10.00cm}|}{De quantos em quantos segundos o MonitorWeb-Cli deve enviar um registro da classe MonitoramentoSwap.(Valor \textit{default} 1 s)} \\ \hline
-hostMonitoramento                      & \multicolumn{1}{p{10.00cm}|}{IP do servidor principal do MonitorWeb-Api.}\\ \hline
-hostMonitoramento2                     & \multicolumn{1}{p{10.00cm}|}{IP do servidor secundario do MonitorWeb-Api.} \\ \hline
-porta                                  & \multicolumn{1}{p{10.00cm}|}{Porta da aplicação no servidor principal do MonitorWeb-Api.} \\ \hline
-porta2                                 & \multicolumn{1}{p{10.00cm}|}{Porta da aplicação no servidor secundario do MonitorWeb-Api.} \\ \hline
-\end{tabular}
-\caption[Variáveis da classe ServidorConfig e suas descrições.]{Variáveis da classe ServidorConfig e suas descrições.}
-\label{Tab:VariaveisServidorConfig}
-\end{table}
+\subsection{Diagrama De Classes}\label{subsec:DiagramaDeClasses}
 
-Um diagrama de classe resumido pode ser visto na \autoref{Img:DiagramaDeClassResumidoDoResumo} contendo as duas classes citadas anteriormente, e diversos outros recursos que estão separados por cores. A seguir uma listagem falando sobre cada bloco de cor do diagrama. 
-
+Um diagrama de classe pode ser visto na \autoref{Img:DiagramaDeClass1}, em que é mostrado resumidamente o relacionamento da classe Servidor com as outras classes da aplicação. Esse diagrama está separado em três partes enumeradas, descritas a seguir.
 
 \begin{itemize}
-		\item No quadro amarelo (classes com prefixo Servidor) corresponde as classes que o usuário tem que cadastrar para os recursos funcionarem.
-		por exemplo para um monitoramento ocorrer um objeto da classe "ServidorConfig" deve ser criado e relacionado com o objeto da classe servidor em questão.
-		\item No quadro rosa (classes com prefixo Informacoes) são classes que serão cadastradas automaticamente pela aplicação MonitorWeb-Cli e fazem referencia a os valores do servidor que são inseridos a cade vez que a aplicação é iniciada. Esses tipos de valores não tem como ser mudado sem que a maquina seja reiniciada. Um exemplos desses valor é o modelo do processador, ele nunca sera mudado sem que a maquina seja reiniciada.
-		\item No quadro laranja (classes com prefixo Monitoramento) são classes que contem valores que precisam ser monitorados de tempos em tempo. Os intervalos de tempo do monitoramento das classe MonitoramentoCpu, MonitoramentoMemoria e MonitoramentoSwap são configurado através do objeto "ServidorConfig" como pode ser visto pela \autoref{Tab:VariaveisServidorConfig}. Exemplos dos valores armazenados por objetos dessa classe são quanto de memoria esta sendo utilizado e quantos Mhz cada núcleo do processador esta utilizado.
+		\item \autoref{Img:DiagramaDeClass1}, Grupo 1. As classes desse grupo possuem o prefixo Servidor e correspondem às configurações da aplicação e as configurações de rotinas do banco de dados.
+		\item \autoref{Img:DiagramaDeClass1}, Grupo 2. Classes desse grupo possuem o prefixo Informacoes. Estas, representam registros cadastrados automaticamente pela aplicação MonitorWeb-Cli e fazem referência às informações do \textit{hardware} (componentes físicos de um computador). Os registros dessas classes são armazenados apenas no momento de inicialização do sistema, pois os valores não podem ser alterados sem a reinicialização da máquina. Exemplos desses valores são o modelo do processador e a quantidade de memoria física. A descrição de cada classe desse grupo pode ser vista no \autoref{App:ApendiceA}.
+		%\item \autoref{Img:DiagramaDeClass1} grupo número 2 (classes desse grupo possuem o prefixo Informacoes) são classes que serão cadastradas automaticamente pela aplicação MonitorWeb-Cli e fazem referencia a os valores do servidor que são inseridos a cade vez que a aplicação é iniciada. Esses tipos de valores não tem como ser mudado sem que a maquina seja reiniciada. Um exemplos desse valor é o modelo do processador, ele nunca sera mudado sem que a maquina seja reiniciada.
+		\item \autoref{Img:DiagramaDeClass1}, Grupo 3. Classes desse grupo possuem o prefixo Monitoramento. Os objetos dessas classes representam registros gerados automaticamente pelo MonitorWeb-Cli com os valores de desempenho de \textit{hardware} e \textit{software} monitorados periodicamente. Exemplos dos valores armazenados por objetos dessas classes são: quantidade de memória e CPU que estão sendo utilizadas, situação dos procedimentos de \textit{backups}. A descrição de cada classe desse grupo pode ser vista no \autoref{App:ApendiceA}
+		%\item \autoref{Img:DiagramaDeClass1} grupo número 3 (classes desse grupo possuem o prefixo Monitoramento) são classes que contem valores que precisam ser monitorados de tempos em tempo. Os intervalos de tempo do monitoramento das classe MonitoramentoCpu, MonitoramentoMemoria e MonitoramentoSwap são configurado através do objeto "ServidorConfig" como pode ser visto pela \autoref{Tab:VariaveisServidorConfig}. Exemplos dos valores armazenados por objetos dessa classe são quanto de memoria esta sendo utilizado e quantos Mhz cada núcleo do processador esta utilizado.
 \end{itemize}
 
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=1.0\textwidth]{figuras/DiagramaDeClassResumidoDoResumo.jpg}
-	\caption[Diagrama de classe resumido 1.]{Diagrama de classe resumido 1, separados pelas cores amarelo, rosa e laranja que correspondem respectivamente a configurações que o usuário deve fazer, informações geradas pelo MonitorWeb-Api e monitoramentos gerados pelo MonitorWeb-Api}
-	\label{Img:DiagramaDeClassResumidoDoResumo}
-	
-	%width=0.5\textwidth (Tamanho da Imagem)
+	\includegraphics[width=1.0\textwidth]{figuras/DiagramaDeClass1.jpg}
+	\caption[Diagrama de classe resumido 1.]{Diagrama de classe resumido 1, separados pelos grupos 1 à 3 que correspondem, respectivamente, às configurações que o usuário deve fazer, informações geradas pelo MonitorWeb-Cli e monitoramentos gerados pelo MonitorWeb-Cli}
+	\label{Img:DiagramaDeClass1}
 \end{figure}
 
 
 
+\subsubsection{Classe ServidorConfig}
+Como pode ser visto na \autoref{Img:DiagramaDeClass1}, a classe ServidorConfig possui um relacionamento de um-para-um com a classe Servidor, indicando assim que um objeto de Servidor pode ter somente um ServidorConfig. Essa classe é vital para o funcionamento do MonitorWeb-Cli. Dentro dela estão as configurações mínimas para que um MonitorWeb-Cli saiba como trabalhar. Na \autoref{Tab:VariaveisServidorConfig} explica-se detalhadamente a classe ServidorConfig.
+
+Na \autoref{Tab:VariaveisServidorConfig}, o valor padrão das variáveis são apenas sugestões. O usuário pode alterar qualquer um deles, porém, é altamente recomendado que esses valores nunca sejam iguais a 0. Caso isso aconteça, o MonitorWeb-Cli enviará o máximo de informações que puder sem qualquer intervalo de tempo. Isso acaba consumindo o máximo de recurso (memória, cpu e disco) do sistema operacional hospedeiro.
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|l|}
+\hline
+{\color[HTML]{000000} \textbf{Variáveis}} & {\color[HTML]{000000} \textbf{Descriçães}} \\ \hline
+id                                     & \multicolumn{1}{p{10.00cm}|}{Número único para cada objeto do tipo ServidorConfig. (Gerado Automaticamente)} \\ \hline
+servidor                               & \multicolumn{1}{p{10.00cm}|}{Informa com qual servidor esse registro esta relacionado.}
+\\ \hline
+dthr\_cadastro                         & \multicolumn{1}{p{10.00cm}|}{Data e hora do cadastro. (Gerado Automaticamente)}\\ \hline
+dthr\_alteracao                        & \multicolumn{1}{p{10.00cm}|}{Data e hora que foi realizado a ultima alteração. (Gerado Automaticamente)(Essa funcionalidade não foi implementada)}\\ \hline
+intervaloLeituraConfiguracoes          & \multicolumn{1}{p{10.00cm}|}{Intervalo em segundos para o MonitorWeb-Cli ler as configurações da classe ServidorConfig, e se reconfigurar(Valor padrão 120 s).} \\ \hline
+intervaloLeituraConfiguracoesDb        & \multicolumn{1}{p{10.00cm}|}{Intervalo em segundos para o  MonitorWeb-Cli ler as configurações da classe ServidorConfigDb, e se reconfigurar(Valor padrão 120 s). Essa classe é mostrada na \autoref{subsubsec:ClasseServidorConfigDb}} \\ \hline
+intervaloCpu                           & \multicolumn{1}{p{10.00cm}|}{Intervalo em segundos para o MonitorWeb-Cli enviar um registro da classe MonitoramentoCpu.(Valor padrão 1 s)}\\ \hline
+intervaloMemoria                       & \multicolumn{1}{p{10.00cm}|}{Intervalo em segundos para o MonitorWeb-Cli enviar um registro da classe MonitoramentoMemoria.(Valor padrão 1 s)}\\ \hline
+intervaloSwap                          & \multicolumn{1}{p{10.00cm}|}{Intervalo em segundos para o MonitorWeb-Cli enviar um registro da classe MonitoramentoSwap.(Valor padrão 1 s)} \\ \hline
+hostMonitoramento                      & \multicolumn{1}{p{10.00cm}|}{IP que o MonitorWeb-Cli deve se comunicar.}\\ \hline
+hostMonitoramento2                     & \multicolumn{1}{p{10.00cm}|}{IP secundário que o MonitorWeb-Cli deve se comunicar caso o servidor principal não esteja funcionando.(Essa funcionalidade não foi implementada)} \\ \hline
+porta                                  & \multicolumn{1}{p{10.00cm}|}{Porta da aplicação para o MonitorWeb-Cli saber em que porta o MonitorWeb-Api esta rodando.} \\ \hline
+porta2                                 & \multicolumn{1}{p{10.00cm}|}{Porta da aplicação secundária para o MonitorWeb-Cli saber em que porta o MonitorWeb-Api esta rodando.(Essa funcionalidade não foi implementada)} \\ \hline
+\end{tabular}
+\caption[Variáveis da classe ServidorConfig e suas descrições.]{Variáveis da classe ServidorConfig e suas descrições.}
+\label{Tab:VariaveisServidorConfig}
+\end{table}
+
+
+\subsubsection{Classe ServidorConfigDb}\label{subsubsec:ClasseServidorConfigDb}
+
+No diagrama de classe mostrado na \autoref{Img:DiagramaDeClass2} existem duas novas classes: a ServidorConfigDb no grupo um e a MonitoremantoPostgres no grupo três. Alem das classes, um novo grupo número 4 é mostrado. Nesse grupo temos as \textit{enums} da aplicação, utilizadas em algumas classes.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1.0\textwidth]{figuras/DiagramaDeClass2.jpg}
+	\caption[Diagrama de classe resumido 2.]{Diagrama de classe resumido 2, separados pelos grupos 1 à 4 que correspondem, respectivamente, às configurações que o usuário deve fazer, informações geradas pelo MonitorWeb-Cli, monitoramentos gerados pelo MonitorWeb-Cli e \textit{enums} da aplicação.}
+	\label{Img:DiagramaDeClass2}
+\end{figure}
+
+A classe ServidorConfigDb é responsável por criar rotinas de \textit{backup} e \textit{vacuum} para o MonitoreWeb-Cli executar. Essa classe possui um relacionamento de muitos-para-um com a classe Servidor, o que indica que em um servidor pode ter diversas rotinas de \textit{backup} e \textit{vacuum}. Na \autoref{Tab:VariaveisServidorConfigDb} é explicada de forma minuciosa a classe ServidorConfigDb.
+
+Essa classe também pode ser utilizada para o MonitoreWeb-Cli executar o procedimento de \textit{backup} e \textit{vacuum} em outro computador, para isso basta ser informado o IP da máquina que se deseja executar o procedimento e que a maquina esteja habilitada para fazer esse procedimento pela rede.
+
+A classe MonitoremantoPostgres é responsável por armazenar os resultados dos \textit{backups} e dos procedimentos de \textit{vacuum} da classe ServidorConfigDb. A descrição de cada variável dessas classe pode ser vista no \autoref{App:ApendiceA}.
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|l|}
+\hline
+{\color[HTML]{000000} \textbf{Variável}} & {\color[HTML]{000000} \textbf{Descrição}}\\ \hline
+id                                       & \multicolumn{1}{p{12.50cm}|}{Número único para cada objeto do tipo ServidorConfigDb. (Gerado Automaticamente) }\\ \hline
+servidor                                 & \multicolumn{1}{p{12.50cm}|}{Indica com qual objeto Servidor esse registro esta relacionado.}\\ \hline
+dthr\_cadastro                           & \multicolumn{1}{p{12.50cm}|}{Data e hora do cadastro. (Gerado Automaticamente) } \\ \hline
+dthr\_alteracao                          & \multicolumn{1}{p{12.50cm}|}{Data e hora que foi realizado a ultima alteração. (Gerado Automaticamente)}\\ \hline
+nomeSgdb                                 & \multicolumn{1}{p{12.50cm}|}{É uma enum do tipo EnumSgdb, que informa em qual SGDB o procedimento será executado. Atualmente somente o postgreSQL é suportado. }\\ \hline
+nomeDb                                   & \multicolumn{1}{p{12.50cm}|}{Nome do banco de dados que o procedimento será executado.}\\ \hline
+pathMain                                 & \multicolumn{1}{p{12.50cm}|}{Caminho para as libs que executam o backup.}\\ \hline
+sgdbTipoExec                             & \multicolumn{1}{p{12.50cm}|}{É uma enum do tipo EnumSgdbTipoExec o qual informa se o procedimento é um backup ou um vacuum.} \\ \hline
+ip                                       & \multicolumn{1}{p{12.50cm}|}{IP para onde devera ser executado o procedimento. }\\ \hline
+porta                                    & \multicolumn{1}{p{12.50cm}|}{Porta que sera executado o procedimento. }\\ \hline
+versao                                   & \multicolumn{1}{p{12.50cm}|}{Versão do SGDB.}\\ \hline
+intervaloExec                            & \multicolumn{1}{p{12.50cm}|}{Intervalo de tempo que o MonitoreWeb-Cli deve executar esse procedimento.}\\ \hline
+ativo                                    & \multicolumn{1}{p{12.50cm}|}{Controle para ativar e desativar o procedimento.}\\ \hline
+\end{tabular}
+\caption[Variáveis da classe ServidorConfigDb e suas descrições.]{Variáveis da classe ServidorConfigDb e suas descrições.}
+\label{Tab:VariaveisServidorConfigDb}
+\end{table}
+
+\subsubsection{Classe ServidorConfigInformacoesDb}
+
+No diagrama de classe mostrado na \autoref{Img:DiagramaDeClass3} existem duas novas classes: a ServidorConfigInformacoesDb no Grupo 1 e a MonitoremantoPostgresInformacoes no Grupo 3.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1.0\textwidth]{figuras/DiagramaDeClass3.jpg}
+	\caption[Diagrama de classe resumido 3.]{Diagrama de classe resumido 3, separados pelos grupos 1 à 4 que correspondem respectivamente a configurações que o usuário deve fazer, informações geradas pelo MonitorWeb-Cli, monitoramentos gerados pelo MonitorWeb-Cli e enums da aplicação.}
+	\label{Img:DiagramaDeClass3}
+\end{figure}
+
+ A classe ServidorConfigInformacoesDb é responsável por criar uma rotina para ler o arquivo com as configurações principais do postgreSQL (postgresql.conf). Essa classe possui um relacionamento de muitos-para-um com a classe Servidor, uma vez que o servidor pode ter várias versões do banco de dados. Na \autoref{Tab:VariaveisServidorConfigInformacoesDb} descreve-se detalhadamente a classe ServidorConfigInformacoesDb.
+
+A classe MonitoremantoPostgres é responsável por armazenar os resultados da classe ServidorConfigInformacoesDb. A descrição de cada variável da classe MonitoremantoPostgres pode ser vista no \autoref{App:ApendiceA}.
+
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|l|}
+\hline
+{\color[HTML]{000000} \textbf{Variável}} & {\color[HTML]{000000} \textbf{Descrição}}\\ \hline
+id                                       & \multicolumn{1}{p{12.50cm}|}{Número único para cada objeto do tipo ServidorConfigDb. (Gerado Automaticamente)} \\ \hline
+servidor                                 & \multicolumn{1}{p{12.50cm}|}{Indica com qual objeto Servidor esse registro esta relacionado. }\\ \hline
+dthr\_cadastro                           & \multicolumn{1}{p{12.50cm}|}{Data e hora do cadastro. (Gerado Automaticamente)}\\ \hline
+dthr\_alteracao                          & \multicolumn{1}{p{12.50cm}|}{Data e hora que foi realizado a ultima alteração. (Gerado Automaticamente)}\\ \hline
+nomeSgdb                                 & \multicolumn{1}{p{12.50cm}|}{É uma enum do tipo EnumSgdb, que informa em qual SGDB o procedimento sera executado. Atualmente somente o postgreSQL é suportado. } \\ \hline
+pathMain                                 & \multicolumn{1}{p{12.50cm}|}{Caminho para o arquivo postgresql.conf . }\\ \hline
+intervaloExec                            & \multicolumn{1}{p{12.50cm}|}{Intervalo de tempo que o MonitoreWeb-Cli deve executar esse procedimento.} \\ \hline
+ativo                                    & \multicolumn{1}{p{12.50cm}|}{Controle para ativar e desativar o procedimento. }\\ \hline
+\end{tabular}
+\caption[Variáveis da classe ServidorConfigInformacoesDb e suas descrições.]{Variáveis da classe ServidorConfigInformacoesDb e suas descrições.}
+\label{Tab:VariaveisServidorConfigInformacoesDb}
+\end{table}
+
+
+
+\subsubsection{Diagrama de classe Usuários}\label{subsubsec:DiagramaClasseUsuarios}
+
+No diagrama de classe mostrado na \autoref{Img:DiagramaDeClass4} existe um Grupo 5. Esse grupo está relacionado a um cadastro de usuário. Ele não é utilizado pelo MonitorWeb-Cli mas pode ser utilizado por implementações futuras para uma aplicação \textit{frontend} para o sistema. 
+
+No Grupo 5 existem duas classes: a Usuario, que corresponde ao cadastro de contas de usuário na aplicação, e a Dominio, que corresponde a uma classe para dividir os usuários por grupo. Dessa forma, uma empresa que tenha diversos setores pode separar mais facilmente qual usuário tem acesso a qual grupo de servidores.
+
+Além das duas classes, existe a classe UsuarioHasDominio que é simplesmente uma classe para uma ligação de muitos-para-muitos entre as classes Usuario e Dominio. A descrição de cada variável da classe Usuario e Dominio pode ser vistas no \autoref{App:ApendiceA}.
+ 
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1.0\textwidth]{figuras/DiagramaDeClass4.jpg}
+	\caption[Diagrama de classe resumido 3.]{Diagrama de classe resumido 4, separados pelos grupos 1 à 5 que correspondem respectivamente a configurações que o usuário deve fazer, informações geradas pelo MonitorWeb-Cli, monitoramentos gerados pelo MonitorWeb-Cli, enums da aplicação e cadastro de usuários.}
+	\label{Img:DiagramaDeClass4}
+\end{figure}
+
+
+\subsubsection{Diagrama de classe Completo}
+
+No diagrama de classe mostrado na \autoref{Img:DiagramaDeClass} existe uma nova classe abstrata chamada de GenericEntity, sendo essa a superclasse para todas as entidades do sistema. A sua função é implementar os métodos \textit{equals} e \textit{hashCode} da classe Object. EXPLICAR O PORQUE!!! Além disso, ela cria os métodos abstratos getId, setId, getDthr\_cadastro e setDthr\_cadastro obrigando todos os métodos que estenderem dela a implementa-los.
+
+A classe GenericEntity recebe um tipo T genérico que estende de Serializable. Esse tipo T representa o tipo da variável id da entidade, para que a aplicação saiba como gerar determinados métodos. A classe GenericEntity pode ser vista no \autoref{App:ApendiceB}.
 
 
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=1.0\textwidth]{figuras/DiagramaDeClassResumido.jpg}
-	\caption[Diagrama de classe resumido 2.]{Diagrama de classe resumido 2, separados pelas cores amarelo, rosa e laranja que correspondem respectivamente a configurações que o usuário deve fazer, informações geradas pelo MonitorWeb-Api e monitoramentos gerados pelo MonitorWeb-Api}
-	\label{Img:estruturaDePastaPojetoEntity}
-	
-	%width=0.5\textwidth (Tamanho da Imagem)
+	\includegraphics[width=1.0\textwidth]{figuras/DiagramaDeClass.jpg}
+	\caption[Diagrama de classe completo.]{Diagrama de classe completo, separados pelos grupos 1 à 5 que correspondem respectivamente a configurações que o usuário deve fazer, informações geradas pelo MonitorWeb-Cli, monitoramentos gerados pelo MonitorWeb-Cli, enums da aplicação e cadastro de usuários.}
+	\label{Img:DiagramaDeClass}
 \end{figure}
 
-
-
-
-
-
-
-
-
-
-
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+- - - - - - - - - - - - - - - - - - - - kleber continuar a revisão daqui - - - - - - - - - - - - - - - - - - - - - - - -
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
 \subsection{Configurações Apache Maven}\label{subsec:ConfiguraçõesApacheMaven}
 
@@ -197,7 +291,7 @@ No \autoref{Func:POMMonitorWebApi}, é mostrado as principais dependências cont
 
 \subsection{Configurações application.properties}\label{subsec:ConfiguraçõesApplicationProperties}
 
-O spring fornece um arquivo de configuração com o nome de "application.properties", e pode ser encontrado na pasta /src/main/resources/application.properties. Dentro desse arquivo pode ser feitas configurações de acordo com a necessidade do projeto \cite{springBoot:2017}.
+O \textit{Spring Boot} fornece um arquivo de configuração com o nome de application.properties, e pode ser encontrado na pasta /src/main/resources/application.properties. Dentro desse arquivo pode ser feitas configurações de acordo com a necessidade do projeto \cite{springBoot:2017}. No \autoref{Func:applicationProperties} pode ser visto o application.properties do MonitoreWeb-Api e a seguir uma lista contendo a descrição de cada configuração.
 
 \begin{itemize}
 		\item \autoref{Func:applicationProperties} linha 2, server.port - Porta que a aplicação ira rodar \cite{springBoot:2017}.
@@ -253,22 +347,11 @@ spring.datasource.driverClassName=org.postgresql.Driver
 
 \subsection{Estrutura do Projeto}\label{subsec:EstruturaDoProjeto}
 
-O projeto foi dividido em seis pastas que podem ser visto na \autoref{Img:estruturaDePastaPojeto}, e uma classe chama WebMonitorApp.class, a qual é responsável por iniciar a aplicação. A \autoref{Tab:DescricaoDasPastasProjeto} temos o nome das pastas e suas descrição.
-
-
+O projeto é dividido em seis pastas que podem ser visto na \autoref{Img:estruturaDePastaPojeto}, e uma classe com nome WebMonitorApp.class, a qual é responsável por iniciar a aplicação. A \autoref{Tab:DescricaoDasPastasProjeto} contem o nome das pastas e suas descrição.
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=1.0\textwidth]{figuras/DiagramaDeClassResumido.jpg}
-	\caption[Pasta DiagramaDeClass.]{Pasta DiagramaDeClass.}
-	\label{Img:estruturaDePastaPojetoEntity}
-	
-	%width=0.5\textwidth (Tamanho da Imagem)
-\end{figure}
-
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=0.4\textwidth]{figuras/estruturaPojeto.JPG}
+	\includegraphics[width=0.5\textwidth]{figuras/estruturaPojeto.JPG}
 	\caption[Estrutura de pastas do projeto.]{Estrutura de pastas do projeto.}
 	\label{Img:estruturaDePastaPojeto}
 	
@@ -282,115 +365,99 @@ O projeto foi dividido em seis pastas que podem ser visto na \autoref{Img:estrut
 \centering
 \begin{tabular}{|l|l|}
 \hline
-\multicolumn{1}{|c|}{{\color[HTML]{000000} \textbf{Pasta}}} & \multicolumn{1}{c|}{{\color[HTML]{000000} \textbf{Descrição}}} \\ \hline
-business                                                    & Responsavel pelas regras de negocio.                           \\ \hline
-entity                                                      & Entidades do sistema.                                          \\ \hline
-enumeration                                                 & Enum.                                                          \\ \hline
-exception                                                   & Exception.                                                     \\ \hline
-repository                                                  & Interfaces para gerar os acessos ao banco de dados.            \\ \hline
-service                                                     & Responsáveis pelos serviços da aplicação.                      \\ \hline
+\multicolumn{1}{|c|}{{\color[HTML]{000000} \textbf{Pasta}}} & {\color[HTML]{000000} \textbf{Descrição}} \\ \hline
+business                                                    & \multicolumn{1}{p{10.00cm}|}{Responsável pelas regras de negocio. \autoref{subsubsec:business}. }\\ \hline
+entity                                                      & \multicolumn{1}{p{10.00cm}|}{Contem as entidades do sistema. \autoref{subsec:DiagramaDeClasses}. }\\ \hline
+enumeration                                                 & \multicolumn{1}{p{10.00cm}|}{Contem as enum da aplicação.}\\ \hline
+exception                                                   & \multicolumn{1}{p{10.00cm}|}{Contem as exception da aplicação.}\\ \hline
+repository                                                  & \multicolumn{1}{p{10.00cm}|}{Interfaces para gerar os acessos ao banco de dados. \autoref{subsubsec:Repository}.}\\ \hline
+service                                                     & \multicolumn{1}{p{10.00cm}|}{Responsáveis pelos serviços da aplicação. \autoref{subsubsec:Service}.}\\ \hline
 \end{tabular}
 \caption{Descrição das pastas do projeto.}
 \label{Tab:DescricaoDasPastasProjeto}
 \end{table}
 
 
+\subsubsection{Repository}\label{subsubsec:Repository}
 
+A pasta repository contem as interfaces de acesso ao banco de dados que são controladas pelo \textit{Spring Data}. Todas essas interfaces devem extender da classe JpaRepository dessa forma diversos consultas são geradas automaticamente pelo \textit{Spring Data}.
 
-\subsection{Pasta entity}\label{subsec:PastaEntity}
-
-A paste entity é responsável pelas entidades da aplicação, e sua estrutura pode ser vistas na \autoref{Img:estruturaDePastaPojetoEntity}.
-Os arquivos possuem três iniciais muito repetidas em seus nomes que são "Informacoes*", "Monitoramento*" e "ServidorConfig*" e cada uma delas possui um significado:
-
-As classes que iniciam com a palavra "Informações", contem valores que só precisam ser armazenados uma única vez quando a aplicação é iniciada.
-Esses tipos de valores não tem como ser mudado sem que a maquina seja reiniciada e o sistema de monitoramento cliente reinicie.
-Exemplos desses valores são, modelo do processador, numero de núcleos do processador e quantidade de memoria.
-
-As classes que iniciam com a palavra "Monitoramento*" contem valores que precisam ser armazenados de tempos em tempo, como quanto de memoria esta sendo utilizado, se o banco de dados executou o backup corretamente, quantos Mhz cada nucleo do processador esta endo utilizado.
-
-As classes que iniciam com a palavra "ServidorConfig*" contem valores que o usuário deve configurar, como IP da aplicação, porta, tempo de intervalo de cada monitoramento.
-
+Na \autoref{Img:estruturaDePastaRepository} pode ser visto que cada classe da aplicação possuem uma interface repository seguindo o padrão de nomenclatura nome da classe mais Repository.
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.4\textwidth]{figuras/estruturaPojetoEntity.JPG}
-	\caption[Pasta Entity.]{Pasta Entity.}
-	\label{Img:estruturaDePastaPojetoEntity}
-	
-	%width=0.5\textwidth (Tamanho da Imagem)
+	\includegraphics[width=0.5\textwidth]{figuras/estruturaPojetoRepository.JPG}
+	\caption[Pasta Repository.]{Pasta Repository.}
+	\label{Img:estruturaDePastaRepository}
 \end{figure}
 
-\subsubsection{classe GenericEntity}\label{subsec:ClassGenericEntity}
 
-Todas as entidades da aplicação estendem da classe abstrata GenericEntity que por sua vez recebe uma tipo <T> genérico que estende de Serializable.
-Esse tipo <T> representa o tipo da variável ID da entidade, para que a aplicação saiba como gerar determinados métodos.
-A classe GenericEntity pode ser vista no \autoref{Func:GenericEntity}
-	
-\begin{lstlisting}[style=Java, label=Func:GenericEntity,caption={[Entidade genérica da aplicação GenericEntity.]Entidade genérica da aplicação GenericEntity e suas funcionalidades.}]
-package br.com.webmonitor.entity.Generic;
+\subsubsection{Business}\label{subsubsec:business}
 
-import java.io.Serializable;
-import java.util.Date;
-import java.util.Objects;
+A pasta business é responsável pelas regras de negocio da aplicação. Cada entidade da aplicação contem uma classe business correspondente que segue o padrão de nomenclatura nome da classe mais BO, como pode ser visto na \autoref{Img:estruturaDePastaBusiness}. 
 
-/**
- * Classe base para qualquer objeto serializável.
- *
- * @author Eduardo Balan
- *
- * @param <T> o tipo do atributo id
- */
-public abstract class GenericEntity<T extends Serializable> implements Serializable {
+Todas as classes da business estendem da classe GenericBO que contem os métodos genéricos de inserção e exclusão do banco de dados. 
 
-    private static final long serialVersionUID = 1L;
+A GenericBO recebe um tipo genérico Entity que estender de GenericEntity informando que essa classe é uma classe da aplicação e um tipo genérico Repository que estende de JpaRepository o que informa que essa classe possui um repositório de acesso ao banco de dados controlado pelo \textit{Spring Boot}. A classe GenericBO pode ser vista no \autoref{App:ApendiceB}.
 
-    public abstract T getId();
-
-    public abstract void setId(T id);
-
-    public abstract Date getDthr_cadastro();
-
-    public abstract void setDthr_cadastro(Date date);
-
-    /**
-     * Indica quando outro objeto é igual a este. Nesta implementação, qualquer objeto derivado de Bean é igual a este desde que seja exatamente da mesma classe e tenha o mesmo ID.
-     *
-     * @author Kleber Kruger
-     *
-     * @param obj o objeto a comparar com este
-     * @return {@code true} se este objeto é igual ao do argumento; {@code false} caso contrário.
-     */
-    @Override
-    public boolean equals(Object obj) {
-        if (getId() != null && obj instanceof GenericEntity) {
-            GenericEntity x = (GenericEntity) obj;
-            return getClass() == x.getClass() && getId().equals(x.getId());
-        }
-        return super.equals(obj);
-    }
-
-    /**
-     * Retorna um valor de hash code para este objeto. Nesta implementação, este valor é gerado por
-     * uma combinação do hash code da classe (getClass().hashCode()) somado ao hash code do atributo
-     * id (id.hashCode()).
-     *
-     * @author Kleber Kruger
-     *
-     * @return um valor de hash code para este objeto
-     */
-    @Override
-    public int hashCode() {
-        if (getId() != null) {
-            return 43 * 7 + Objects.hashCode(getClass().hashCode() + getId().hashCode());
-        }
-        return super.hashCode();
-    }
-
-}
-\end{lstlisting}
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.5\textwidth]{figuras/estruturaPojetoBusines.JPG}
+	\caption[Pasta Business.]{Pasta Business.}
+	\label{Img:estruturaDePastaBusiness}
+\end{figure}
 
 
-\subsection{Comsumindo recursos do MonitorWeb-Api}\label{subsec:ComsumindoRecursos}
+
+\subsubsection{Service}\label{subsubsec:Service}
+
+A pasta Service é responsáveis por coordenar o serviço da aplicação. São elas que recebem as requisições HTTP e dizem o que sera feito com cada requisição. Cada entidade da aplicação contem uma classe Service correspondente que segue o padrão de nomenclatura nome da classe mais Service, como pode ser visto na \autoref{Img:estruturaDePastaService}. 
+
+Cada classe possui uma URL destinada a gerenciar seu recurso. As URL de cada recurso podem ser vistas na \autoref{Tab:}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.5\textwidth]{figuras/estruturaPojetoService.JPG}
+	\caption[Pasta Service.]{Pasta Service.}
+	\label{Img:estruturaDePastaService}
+\end{figure}
+
+\begin{table}[]
+\centering
+\begin{tabular}{|l|l|}
+\hline
+{\color[HTML]{000000} \textbf{Classe}}  & {\color[HTML]{000000} \textbf{URL}} \\ \hline
+Usuario                           & \multicolumn{1}{p{9.00cm}|}{/usuario } \\ \hline
+Dominio                           & \multicolumn{1}{p{9.00cm}|}{/dominio }  \\ \hline
+Servidor                          & \multicolumn{1}{p{9.00cm}|}{/servidor }  \\ \hline
+InformacoesCpu                   & \multicolumn{1}{p{9.00cm}|}{/servidor/\{idServidor\}/informacoescpu}   \\ \hline
+InformacoesMemoria               & \multicolumn{1}{p{9.00cm}|}{/servidor/\{idServidor\}/informacoesmemoria}  \\ \hline
+InformacoesSwap                  & \multicolumn{1}{p{9.00cm}|}{/servidor/\{idServidor\}/informacoesswap } \\ \hline
+MonitoramentoCpu                 & \multicolumn{1}{p{9.00cm}|}{/servidor/informacoes/\{idInformacoesCpu\}/mon-} \\ 
+                                 & \multicolumn{1}{p{9.00cm}|}{itoramentocpu}\\ \hline
+MonitoramentoMemoria             & \multicolumn{1}{p{9.00cm}|}{/servidor/informacoes/\{idInformacoesMemoria\}-} \\
+																 & \multicolumn{1}{p{9.00cm}|}{/monitoramentomemoria}\\ \hline
+MonitoramentoPostgresInformacoes & \multicolumn{1}{p{9.00cm}|}{/servidor/informacoes/\{idInformacoesPostgresIn-} \\
+																 & \multicolumn{1}{p{9.00cm}|}{formacoes\}monitoramentopostgresinformacoes}\\ \hline
+MonitoramentoPostgres            & \multicolumn{1}{p{9.00cm}|}{/servidor/informacoes/\{idInformacoesPostgres\}/-} \\
+																 & \multicolumn{1}{p{9.00cm}|}{monitoramentopostgres} \\ \hline
+MonitoramentoSwap                & \multicolumn{1}{p{9.00cm}|}{/servidor/informacoes/\{idInformacoesSwap\}/mo-}\\
+																 & \multicolumn{1}{p{9.00cm}|}{nitoramentoswap }  \\  \hline
+ServidorConfigDb                 & \multicolumn{1}{p{9.00cm}|}{/servidor/\{idServidor\}/servidorconfiguracoesdb }\\ \hline
+ServidorConfigInformacoesDb      & \multicolumn{1}{p{9.00cm}|}{/servidor/\{idServidor\}/servidorconfiguracoesinfo-} \\ 
+																 & \multicolumn{1}{p{9.00cm}|}{rmacoesdb }  \\  \hline
+ServidorConfig                   & \multicolumn{1}{p{9.00cm}|}{/servidor/\{idServidor\}/servidorconfiguracoes }\\ \hline
+\end{tabular}
+\caption[Variáveis da classe ServidorConfigInformacoesDb e suas descrições.]{Variáveis da classe ServidorConfigInformacoesDb e suas descrições.}
+\label{Tab:VariaveisMonitoramentoPostgres}
+\end{table}
+
+
+\subsection{Comsumindo serviços do MonitorWeb-Api}\label{subsec:ComsumindoRecursos}
+
+
+
+
 
 \section{MonitorWeb-Cli}\label{sec:MonitorWeb-Cli}
 

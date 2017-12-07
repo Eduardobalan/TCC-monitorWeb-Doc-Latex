@@ -10,6 +10,7 @@
 *.fdb_latexmk
 
 # SyncTeX
+*.synctex
 *.synctex.gz
 
 # LaTeX Beamer
@@ -24,6 +25,8 @@
 
 #new
 *.tmp
+*.lol
+*.lot
 
 # Sublime Text Project Files (usually contain absolute paths)
 *.sublime-project
