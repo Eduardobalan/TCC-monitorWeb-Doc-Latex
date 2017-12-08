@@ -12,7 +12,7 @@
 
 \chapter{Fundamentação Teórica}\label{cap:funTeorica}
 
-Neste Capítulo são apresentados os conceitos utilizados neste trabalho de acordo com a literatura estudada. Na seção \ref{sec:ArquiteturaClienteServidor} explica-se os conceitos da arquitetura cliente-servidor. Na Seção \ref{sec:WebServices} explicase os conceitos de um \textit{web-service}. Na Seção \ref{sec:BancodeDados} explica-se o conceito de Banco de Dados. Na Seção \ref{sec:Http} explica-se o conceito do protocolo HTTP/1.1 seus metodos forma de utilização e respostas esperadas. Na Seção \ref{sec:ArquiteturaReST} é apresentada o estilo de desenvolvimento da arquitetura ReST e na Seção \ref{sec:TestesAutomatizados} são mostradas as principais vantagens e melhorias adquiridas por meio dos testes automatizados.
+Neste Capítulo são apresentados os conceitos utilizados neste trabalho de acordo com a literatura estudada. Na seção \ref{sec:ArquiteturaClienteServidor} explica-se os conceitos da arquitetura cliente-servidor. Na Seção \ref{sec:WebServices} explicasse os conceitos de um \textit{web-service}. Na Seção \ref{sec:BancodeDados} explica-se o conceito de Banco de Dados. Na Seção \ref{sec:Http} explica-se o conceito do protocolo HTTP/1.1 seus métodos forma de utilização e respostas esperadas. Na Seção \ref{sec:ArquiteturaReST} é apresentada o estilo de desenvolvimento da arquitetura ReST e na Seção \ref{sec:TestesAutomatizados} são mostradas as principais vantagens e melhorias adquiridas por meio dos testes automatizados.
 
 
 \section{Arquitetura Cliente-Servidor}\label{sec:ArquiteturaClienteServidor}
@@ -33,42 +33,11 @@ Em aplicações cliente-servidor, muitas vezes acontece de um único hospedeiro 
 \section{\textit{Web Services}}\label{sec:WebServices}
 
 
-O \textit{Web Service} é um \textit{software}  que atende a uma função de negócio específica para seus clientes. Ele recebe requisições de clientes e as responde ocultando todo o detalhamento do seu processamento. Normalmente as transações estão em formato XML (\textit{Extended Markup Language}), e são transmitidas utilizando o protocolo HTTP (HyperText Transfer Protocol), entretanto podem ser utilizados outros protocolos de transporte \cite{Sampaio:2003}.
+O \textit{Web Service} é um \textit{software}  que atende a uma função de negócio específica para seus clientes. Ele recebe requisições de clientes e as responde ocultando todo o detalhamento do seu processamento. Normalmente as transações estão em formato XML (\textit{Extended Markup Language}), e são transmitidas utilizando o protocolo HTTP (\textit{HyperText Transfer Protocol}), entretanto podem ser utilizados outros protocolos de transporte \cite{Sampaio:2003}.
 
-Os \textit{Web Services}, aliados aos padrões estabelecidos da Internet, podem fazer com que os dados fluam entre as várias entidades, como o governo e empresas interagindo entre si, reduzindo custos de modo a possibilitar maior facilidade e rapidez na troca de informações \cite{Abinader:2006}. Um exemplo utilizado nacionalmente é a NF-e (Nota Fiscal Eletrônica) em que diversas empresas com \textit{softwares} diferentes enviam arquivos xml utilizando o protocolo https (\textit{Hyper Text Transfer Protocol Secure}) para o \textit{web service} da receita federal, aguardam a realização dos processamentos de validação e recebem um arquivo xml de retorno com as informações desejadas.
+Os \textit{Web Services}, aliados aos padrões estabelecidos da Internet, podem fazer com que os dados fluam entre as várias entidades, como o governo e empresas interagindo entre si, reduzindo custos de modo a possibilitar maior facilidade e rapidez na troca de informações \cite{Abinader:2006}. Um exemplo utilizado nacionalmente é a NF-e (Nota Fiscal Eletrônica) em que diversas empresas com \textit{softwares} diferentes enviam arquivos XML utilizando o protocolo https (\textit{Hyper Text Transfer Protocol Secure}) para o \textit{web service} da receita federal, aguardam a realização dos processamentos de validação e recebem um arquivo XML de retorno com as informações desejadas.
 
 Um \textit{web wervice} deve executar unidades completas de trabalho, não dependendo do estado de outros componentes externos. Outra definição importante é que eles devem ser "\textit{Stateless}" ou seja, cada requisição é considerada uma transação independente que não está relacionada a qualquer requisição anterior de forma que a comunicação consista de pares de requisição e resposta independentes \cite{Sampaio:2003, W3C:2001}.
-
-
-\section{Banco de Dados} \label{sec:BancodeDados}
-
-Um Sistema de banco de dados é basicamente um sistema computadorizado de manutenção de registros. O banco de dados, por si só, pode ser considerado como o equivalente eletrônico de um armário de arquivamento; ou seja, ele é um repositório ou recipiente para uma coleção de arquivos de dados computadorizados. Os usuários de um banco de dados podem solicitar que o sistema realize diversas operações envolvendo tais arquivos, por exemplo:
-\begin{itemize}
-		\item Acrescentar novos arquivos ao banco de dados
-		\item Inserir dados em arquivos existentes 
-		\item Buscar dados de arquivos existentes
-		\item Excluir dados de arquivos existentes
-		\item Alterar dados em arquivos existentes
-		\item Remover arquivos existentes do Banco de dados
-\end{itemize}
-
-As informações contidas no banco de dados em questão podem ser qualquer coisa que tenha algum significado ou indivíduo ou à organização a que o sistema deve servir, ou seja, qualquer coisa que seja necessária para auxiliar no processo geral das atividades desse indivíduo ou dessa organização
-
-Os sistemas de bancos de dados Estão disponíveis em máquinas que variam desde pequenos computadores de mão (hand-helds e celulares) ou computadores pessoais até os maiores mainframes ou clusters de computadores de grande porte. Normalmente sistemas em máquinas grandes costumam ser multiusuários, enquanto os que estão em máquinas menores tendem a ser de monousuários. Um sistema monousuário é um sistema em que no máximo um usuário pode acessar o banco de dados em determinado momento; um sistema multiusuário é aquele em que muitos usuários podem acessar o banco de dados ao mesmo tempo; porém, a distinção é irrelevante para a maioria dos usuários, pois um dos objetivos dos sistemas multiusuários, em geral, é que cada usuário se comporte como se estivesse trabalhando com um sistema monousuário.
-
-
-As informações contidas no banco de dados são persistentes, ou seja, uma vez que um operação de inserir é aceita pelo SGBD (Sistema de Gerenciamento de Banco de Dados), ela só poderá ser removida por outra requisição explicita ao SGBD, e não como um mero efeito colateral, como algum programa concluindo sua execução apagar todos os registros.
-
-
-As transações realizadas pelo SGBD utilizam o conceito de ACID(Atomicidade, Consistência, Isolamento e Durabilidade):
-
-\begin{itemize}
-		\item Atomicidade quer dizer que um bloco de transações deve ter todas as suas operações executadas em caso de sucesso ou nenhum operação executada, mesmo que o sistema venha a falha.
-		\item Consistência diz que a execução de uma transação deve levar o banco de dados de um estado consistente a um outro estado consistente, dessa forma, uma transação deve respeitar as regras de integridade dos dados
-		\item Isolamento quer dizer que transações paralelas não interferem umas nas outras, ou seja, se um usuário tentar alterar o salario de um funcionário e outro usuário tentar alterar o mesmo salario ao mesmo tempo uma transação só iniciara quando a outra for completamente terminada.
-		\item Durabilidade diz que as transações com sucesso devem persistir no banco de dados mesmo em caso de falha.
-\end{itemize}
-
 
 
 \section{HTTP/1.1 \textit{HyperText Transfer Protocol}} \label{sec:Http}
@@ -81,8 +50,7 @@ Na utilização do protocolo HTTP/1.1 todos os clientes e todos os servidores de
 
 O modo habitual de cliente entrar em contato com um servidor é estabelecer uma conexão TCP (\textit{Transmission Control Protocol}) para a porta 80 da máquina servidora, embora esse procedimento não seja exigido formalmente. A vantagem de se usar o TCP é que ambas as partes não têm de se preocupar com mensagens perdidas, mensagens duplicadas, mensagens longas ou confirmações. Todos esses assuntos são tratados pela implementação do TCP \cite{Tanenbaum:2003}.
 
-O HTTP/1.1 diferentemente de seus antecessores, admite conexões persistentes. Com elas, é possível estabelecer uma conexão TCP, enviar uma solicitação e obter uma resposta, e depois enviar solicitações adicionais e receber respostas adicionais. Amortizando o custo da instalação e
-da liberação do TCP por várias solicitações, o processamento relativo devido ao TCP é muito menor por solicitação. Também é possível transportar as solicitações por \textit{pipeline}, ou seja, enviar a segunda solicitação antes de chegar a resposta da primeira \cite{Tanenbaum:2003}.
+O HTTP/1.1 diferentemente de seus antecessores, admite conexões persistentes. Com elas, é possível estabelecer uma conexão TCP, enviar uma solicitação e obter uma resposta, e depois enviar solicitações adicionais e receber respostas adicionais. Amortizando o custo da instalação e da liberação do TCP por várias solicitações, o processamento relativo devido ao TCP é muito menor por solicitação. Também é possível transportar as solicitações por \textit{pipeline}, ou seja, enviar a segunda solicitação antes de chegar a resposta da primeira \cite{Tanenbaum:2003}.
 
 
 
@@ -169,10 +137,10 @@ Sempre que uma requisição é enviada ela segue o formato da requisições que 
 \end{lstlisting}
 
 
-Quando um GET para http://www.site.com.br/clientes é realizado uma requisição é criada como pode ser visto no \autoref{Func:GETExemplo}. Nesta requisição pode ser visto em sua primeira linha o método GET da solicitação seguido pela URL a qual esta sendo feito a solicitação e pela versão do protocolo HTTP. O servidor responsável por receber a solicitação e a porta são passado no cabeçalho da requisição precedido por "Host:". Na terceira linha pode ser visto um cabeçalho \textit{Accept}, que serve para informar ao servidor qual tipo de dados a requisição espera receber \cite{Saudate:2014}.
+Quando um GET para \url{http://www.site.com.br/clientes} é realizado uma requisição é criada como pode ser visto no \autoref{Func:GETExemplo}. Nesta requisição pode ser visto em sua primeira linha o método GET da solicitação seguido pela URL a qual está sendo feito a solicitação e pela versão do protocolo HTTP. O servidor responsável por receber a solicitação e a porta são passado no cabeçalho da requisição precedido pela palavra Host. Na terceira linha pode ser visto um cabeçalho \textit{Accept}, que serve para informar ao servidor qual tipo de dados a requisição espera receber \cite{Saudate:2014}.
 
 
-\begin{lstlisting}[label=Func:GETExemplo,caption={[Exemplo de uma requisição HTTP utilizando o método GET.]Exemplo de uma solicitação HTTP utilizando o método GET, para http://www.site.com.br/clientes com o pedido de uma arquivo XML de resposta.}]
+\begin{lstlisting}[label=Func:GETExemplo,caption={[Exemplo de uma requisição HTTP utilizando o método GET.]Exemplo de uma solicitação HTTP utilizando o método GET, para \url{http://www.site.com.br/clientes} com o pedido de uma arquivo XML de resposta.}]
 GET /clientes HTTP/1.1
 Host: www.site.com.br:80
 Accept: text/xml
@@ -223,13 +191,13 @@ Este, por sua vez, é co-autor de um dos protocolos mais utilizados no mundo, o 
 Assim, é notável que o protocolo ReST é guiado pelo que seriam as boas práticas de uso do HTTP/1.1 \cite{Saudate:2014}:
 
 
-Em ReST, cada recurso deve ter uma URL bem definida. Por exemplo, o conjunto dos usuários de um sistema pode ter mapeada para si uma URL http://www.site.com/usuarios. Caso queiramos apenas o usuário de ID 1, essa URL se torna http://www.site.com/usuarios/1 \cite{Saudate:2012}.
+Em ReST, cada recurso deve ter uma URL bem definida. Por exemplo, o conjunto dos usuários de um sistema pode ter mapeada para si uma URL \url{http://www.site.com/usuarios}. Caso queiramos apenas o usuário de ID 1, essa URL se torna \url{http://www.site.com/usuarios/1} \cite{Saudate:2012}.
 
 Parâmetros adicionais que não fazem parte da definição do recurso propriamente dito e/ou sejam opcionais podem ser passados em formato de \textit{query string}, ou seja, dados “anexados” à URL. 
 Esses dados devem ser passados após o '?' e contendo um nome, seguido de '=' e seu respectivo valor, outros dados adicionais devem ser separados por '\&'. 
-Por exemplo, para utilizar paginação em um listagem de usuários, deve ser passado um \textit{query string} contendo os valores desejados da paginação, como na requisição http://www.site.com/usuarios?pagina=1\&itemPorPagina=20 \cite{Saudate:2012}.
+Por exemplo, para utilizar paginação em um listagem de usuários, deve ser passado um \textit{query string} contendo os valores desejados da paginação, como na requisição \url{http://www.site.com/usuarios?pagina=1\&itemPorPagina=20} \cite{Saudate:2012}.
 
-Note que as URLs seguem uma estrutura hierárquica, ou seja, o elemento seguinte obedece a um relacionamento com o elemento anterior. Ou seja, se quisermos o endereço do usuário, devemos obter primeiro o usuário em questão e, depois, o endereço. Assim sendo, a URL seria http://www.site.com/usuarios/1/endereco . No entanto, se quiséssemos obter apenas o endereço de todos os usuários, aí teríamos uma URL http://www.site.com/usuarios/endereco. O endereço obedece a uma estrutura hierárquica em relação a usuários \cite{Saudate:2012}.
+Note que as URLs seguem uma estrutura hierárquica, ou seja, o elemento seguinte obedece a um relacionamento com o elemento anterior. Ou seja, se quisermos o endereço do usuário, devemos obter primeiro o usuário em questão e, depois, o endereço. Assim sendo, a URL seria \url{http://www.site.com/usuarios/1/endereco} . No entanto, se quiséssemos obter apenas o endereço de todos os usuários, aí teríamos uma URL \url{http://www.site.com/usuarios/endereco}. O endereço obedece a uma estrutura hierárquica em relação a usuários \cite{Saudate:2012}.
 
 
 \section{Testes Automatizados} \label{sec:TestesAutomatizados}
