@@ -12,7 +12,7 @@
 
 \chapter{Metodologia} \label{cap:metodologia}
 
-Neste Capítulo são apresentadas as ferramentas utilizados neste trabalho de acordo com a literatura estudada. Na seção \ref{sec:SpringFramework} explica-se sobre o Spring Framework e seus diversos modulos. 
+Neste Capítulo são apresentadas as ferramentas utilizados neste trabalho de acordo com a literatura estudada. 
 
 \section{Spring Framework}\label{sec:SpringFramework}
 
@@ -20,7 +20,7 @@ O Spring Framework fornece um modelo abrangente de programação e configuraçã
 
 Spring é um projeto de código aberto. Possui uma comunidade grande e ativa que fornece \textit{feedback} contínuo com base em uma ampla gama de casos de uso do mundo real. Isso ajudou a Spring a evoluir com êxito \cite{SpringFramework:2017}.
 
-O Spring Framework é dividido em módulos. As aplicações podem escolher quais módulos eles precisam. No \textit{core} são os módulos do núcleo, incluindo um módulos de configuração e um mecanismo de injeção de dependência. Além disso, o Spring Framework fornece suporte fundamental para diferentes arquiteturas de aplicativos, incluindo mensagens, dados transacionais e persistência, e \textit{web}. Inclui também a estrutura \textit{web} Spring MVC baseada em Servlet \cite{SpringFramework:2017}.
+O Spring Framework é dividido em módulos. Os desenvolvedores podem escolher quais módulos eles precisam. No \textit{core} são os módulos do núcleo, incluindo um módulos de configuração e um mecanismo de injeção de dependência. Além disso, o Spring Framework fornece suporte fundamental para diferentes arquiteturas de aplicativos, incluindo mensagens, dados transacionais e persistência, e \textit{web}. Inclui também a estrutura \textit{web} Spring MVC baseada em Servlet \cite{SpringFramework:2017}.
 
 \subsection{Spring Boot}\label{subsec:SpringBoot}
 
@@ -30,16 +30,16 @@ Atualmente o Spring Boot é considerado um facilitador para a criação de aplic
 
 O Spring Boot tem um conceito na especificação JEE, que acelera o desenvolvimento e simplifica bastante a vida de quem trabalha com aplicações do Spring Framework \cite{Boagrio:2017}.
 
-\subsection{spring-boot-test}\label{subsec:SpringTest}
+\subsection{Spring Boot Test}\label{subsec:SpringTest}
 
-O Spring boot test é a biblioteca Spring responsável pelos testes automatizados que foram  visto no \autoref{sec:TestesAutomatizados}. A intenção dessa biblioteca é fazer os testes ficarem o mais fáceis possíveis através de anotações e injeção de dependência para tornar seu código menos dependente de diversos \textit{Framework} do que seria com o desenvolvimento Java EE tradicional. 
+O Spring Boot Test é a biblioteca Spring responsável pelos testes automatizados que foram  visto no \autoref{sec:TestesAutomatizados}. A intenção dessa biblioteca é fazer os testes ficarem o mais fáceis possíveis através de anotações e injeção de dependência para tornar seu código menos dependente de diversos \textit{Framework} do que seria com o desenvolvimento Java EE tradicional. 
 O Spring Boot Test incorpora em seu projeto diversas bibliotecas, algumas delas podem ser vistas a seguir \cite{springBootTest:2017}:
 
 \subsubsection{JUnit}\label{subsec:JUnit}
 	
-	A plataforma JUnit é um framework para facilitar a criação de testes de unidade e em especial sua execução. Ele possui alguns métodos que tornam o código de teste bem legível e fácil de fazer as asserções \cite{junit:2017}.
+	A plataforma JUnit é um \textit{framework} para facilitar a criação de testes de unidade e em especial sua execução. Ele possui alguns métodos que tornam o código de teste bem legível e fácil de fazer as asserções \cite{junit:2017}.
 
-Uma asserção é uma afirmação. Algumas vezes em determinados pontos do teste é preciso garantir que uma variável tenha um determinado valor, casso isso não ocorra, o teste deve indicar uma falha a ser reportada para o programado, indicando um possível bug \cite{junit:2017}.
+Uma asserção é uma afirmação. Algumas vezes em determinados pontos do teste é preciso garantir que uma variável tenha um determinado valor, casso isso não ocorra, o teste deve indicar uma falha a ser reportada para o programado, indicando um possível \textit{bug} \cite{junit:2017}.
 	
 \subsubsection{Hamcrest}\label{subsec:Hamcrest}
 
@@ -54,7 +54,7 @@ Uma asserção é uma afirmação. Algumas vezes em determinados pontos do teste
 	É um  DSL(\textit{Domain Specific Languages}) para ler documentos JSON, ela oferece aos desenvolvedores uma manira simples de extrair dados específicos de um json \cite{JsonPath:2017}.
 
 
-\subsection{Spring-Data}\label{subsec:SpringData}
+\subsection{Spring Data}\label{subsec:SpringData}
 
 A missão da Spring Data é fornecer um modelo de programação familiar e consistente, baseado em Spring, para acesso a dados. Este módulo facilita o uso de tecnologias de acesso a dados, bancos de dados relacionais e não-relacionais, estruturas de redução de mapas e serviços de dados baseados em nuvem \cite{springData:2017}. Ele abstrai para o desenvolvedor aqueles detalhes repetitivos das implementação de acessos a dados, através de \textit{templates} \cite{Weissmann:2012}.
 
@@ -63,13 +63,13 @@ Este projeto contém muitos subprojetos específicos de banco de dados. Os proje
 
 \subsubsection{Spring-Data-jpa}\label{subsubsec:SpringDatajpa}
 
-\textit{Spring Data JPA} visa melhorar significativamente a implementação da camadas de acesso a dados, reduzindo o esforço para a quantidade minima necessária. Suas interfaces de repositório incluindo métodos de busca personalizados, e o Spring irá fornecer a implementação de acesso aos dados automaticamente \cite{springDataJpa:2017}.
+\textit{Spring Data JPA} visa melhorar significativamente a implementação da camadas de acesso a dados, reduzindo o esforço para a quantidade miníma necessária. Suas interfaces de repositório incluindo métodos de busca personalizados, e o Spring irá fornecer a implementação de acesso aos dados automaticamente \cite{springDataJpa:2017}.
 
 
 
 \section{Apache Maven}\label{sec:ApacheMaven}
 
-Apache Maven é uma ferramenta que pode ser usada para construir e gerenciar qualquer projeto baseado em Java. Ele permite que um projeto seja construído usando um arquivo POM.xml (Modelo de Objeto de Projeto) dentro desse arquivo são declaradas as dependências e características do seu projeto. Quando o Maven é executado ele faz a leitura desse arquivo e realiza o \textit{donwload} das dependências em formato JAR (\textit{Java ARchive}) necessários para construir. Os arquivos JAR ficam em um reposiciono central e isso permite aos usuários do Maven reutilizar JARs em todos os projetos e incentiva a comunicação entre projetos para garantir que os problemas de compatibilidade com versões anteriores sejam tratados \cite{ApacheFeature:2017}.
+Apache Maven é uma ferramenta que pode ser usada para construir e gerenciar qualquer projeto baseado em Java. Ele permite que um projeto seja construído usando um arquivo POM.MXL (Modelo de Objeto de Projeto) dentro desse arquivo são declaradas as dependências e características do seu projeto. Quando o Maven é executado ele faz a leitura desse arquivo e realiza o \textit{donwload} das dependências em formato JAR (\textit{Java ARchive}) necessários para construir. Os arquivos JAR ficam em um reposiciono central e isso permite aos usuários do Maven reutilizar JARs em todos os projetos e incentiva a comunicação entre projetos para garantir que os problemas de compatibilidade com versões anteriores sejam tratados \cite{ApacheFeature:2017}.
 
 
 No \autoref{Func:ExemploPom} pode ser visto um exemplo de um arquivo POM e o comentário (<!-- comentário -->) em cada linha.
@@ -89,7 +89,7 @@ No \autoref{Func:ExemploPom} pode ser visto um exemplo de um arquivo POM e o com
 %\end{itemize}
 
 
-\begin{lstlisting}[style=XML,label=Func:ExemploPom,caption={[pom.]pom.}]
+\begin{lstlisting}[style=XML,label=Func:ExemploPom,caption={[Exemplo de um arquiv POM.xml.]Exemplo de um arquiv POM.xml.}]
 <project> <!-- Informa o inicio do arquivo -->
 	<modelVersion>4.0.0</modelVersion><!-- Versão do arquivo POM -->
 	<groupId>br.com.monitorweb</groupId><!-- Grupo ao qual o projeto pertence -->
@@ -110,12 +110,27 @@ No \autoref{Func:ExemploPom} pode ser visto um exemplo de um arquivo POM e o com
 \end{lstlisting}
 
 
-
-\section{Boost}\label{sec:Boost}
-
-\subsubsection{Asio}\label{subsubsec:Asio}
-
-\subsubsection{Ptree}\label{subsubsec:Ptree}
+\section{Sistema Para Depuração Valgrind}\label{sec:Valgrind}
 
 
+O Valgrind é um conjunto de ferramentas que formam um sistema para depuração de programas Unix/Linux grandes e complexos, mas pode ser utilizado para qualquer tipo de \textit{software}. Entre as distribuições Linux suportadas estão: Red Hat, SuSE, Debian, Gentoo, Slackware, Mandrake e outras \cite{Valgrind:2017}.
 
+O Valgrind funciona diretamente com os binários do programa, por essa razão não necessita do código-fonte da aplicação para ser executado. Além disso, funciona com programas escritos em diversas linguagens como C, C++, Java, Perl, Python, Fortran, Ada e outros, mas é voltada principalmente para programas escritos em C e C++, pois programas escritos nessas linguagens tendem a ter mais erros \cite{Valgrind:2017}.
+ 
+Dentre as ferramentas que o Valgrid utiliza está a Memcheck que detecta problemas de gerenciamento de memória. Quando um programa é executado sob a supervisão da Memcheck, todas as leituras e gravações da memória são verificadas, e as chamadas para \textit{malloc} (\textit{memory allocation}), new, free e delete são interceptadas. Como resultado, a Memcheck pode detectar se o seu programa \cite{Valgrind:2017}:
+
+\begin{itemize}
+	\item Acessa regiões indevidas de memória (áreas ainda não alocadas, áreas que foram liberadas, áreas após o fim dos blocos de pilha, áreas inacessíveis da pilha);
+	\item Usa valores não-inicializados de memória;
+	\item Identifica vazamentos de memória (\textit{memory leaks}).
+	\item Liberações equivocadas de blocos na região do \textit{heap};
+\end{itemize}
+
+Outra ferramenta importante do Valgrid é a Helgrind que é um depurador de \textit{threads} que encontra paralelismo de dados em programas com multiprocessos. Ele procura locais de memória acessados por mais de uma \textit{thread}, mas para o qual nenhum bloqueio consistente pode ser encontrado. Tais locais são indicativos de sincronização ausente entre \textit{threads} e podem causar problemas futuros \cite{Valgrind:2017}.
+
+
+%\section{Boost}\label{sec:Boost}
+
+%\subsubsection{Asio}\label{subsubsec:Asio}
+
+%\subsubsection{Ptree}\label{subsubsec:Ptree}

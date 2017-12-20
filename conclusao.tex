@@ -12,5 +12,74 @@
 % Data de criação	: 29 de Março de 2017
 %=====================================================================================================
 
-\chapter{Conclusão} \label{cap:conclusao}
+\chapter{Considerações Finais} \label{cap:conclusao}
 
+Neste trabalho realizou-se a criação de um sistema para monitoramento de servidores Linux utilizando uma arquitetura cliente-servidor. As aplicações desenvolvidas possibilitaram o monitoramento de CPU, memória, \textit{swap}, e a realização de \textit{backups} e \textit{vacuum} em bancos de dados PostgreSQL. Esses dados, ao serem enviados para a aplicação servidor (\textit{web service}), ficam disponibilizados por meio do padrão ReST.
+
+Durante a fase de implementação, além das aplicações propostas (MonitorWeb-Api e MonitorWeb-Cli), houve a necessidade da criação de algumas bibliotecas para uso especifico, tais como a ConfigFile, SystemLog e Resource, que podem ser aproveitas na codificação de outros sistemas.
+
+Os resultados apontam que a aplicação cliente, executando com uma configuração comum em um caso real (3 registros por segundo - CPU, memória e \textit{swap}) consumiu em torno de 0,5\% do processamento da maquina hospedeira. Em um caso extremo (sem intervalos entre os monitoramentos de CPU, memória e \textit{swap}), usado somente em testes, atingiu o valor de 546,34 registros por segundo com uma taxa de uso de CPU igual a 27,5\% na máquina hospedeira. Em ambos os casos, o consumo de memória ficou em 906960 (0.864944 Mb). Esses resultados indicam que a quantidade de recurso utilizado pelo sistema cliente é relativo a configuração feita pelo usuário e pode ser controlada conforme a necessidade.
+
+Nos testes sem intervalos entre os monitoramentos de CPU, memória e \textit{swap}, a aplicação respondeu normalmente, porém seu comportamento ficou limitado pelo banco de dados PostgreSQL que atingiu um auto consumo do SSD. Os resultados desse teste mostram que o sistema conseguiu realizar uma média de 546,34 registros por segundo. Considerando-se, por exemplo, uma máquina com as mesmas configurações de \textit{hardware} e as mesmas condições de sistema operacional e de rede apresentadas nos testes, com clientes fazendo 3 requisições por segundo, é possível sugerir que um único servidor aguentaria 182 sistemas clientes. Entretanto, é necessário ponderar essa afirmação, dado que há diversos fatores que podem influenciar, tais como: o trafego da rede, as configurações do banco de dado, sobrecargas no sistema operacional, entre outros.
+ 
+As aplicações MonitorWeb-Api, MonitorWeb-Cli e a documentação completa podem ser encontradas no repositório do Github, disponível para a comunidade, respectivamente, nos endereços: \url{https://github.com/Eduardobalan/TCC-monitorWeb-api}, \url{https://github.com/Eduardobalan/TCC-monitorWeb-Cliente}  e  \url{https://github.com/Eduardobalan/TCC-monitorWeb-Doc-Latex}
+
+\section{Contribuições deste Trabalho}
+    \begin{itemize}
+        \item Uma biblioteca para linguagem C++ chamada ConfigFile, capaz de realizar a leitura e escrita em disco no formato "chave valor".
+        
+        \item Um biblioteca para linguagem C++ chamada SystemLog, capaz de gerar logs em tela para o usuário ou para um arquivo em disco. A biblioteca pode ser configurada de acordo com a necessidade do usuário para mostrar informações, avisos (\textit{warnings}) ou erros.
+        
+        \item Uma biblioteca para linguagem C++ chamada Resource, capaz de realizar a comunicação entre uma aplicação C++ com uma aplicação ReST, utilizando os métodos POST e GET do protocolo HTTP/1.1.
+        
+        \item Um arquivo pom.xml para usuários do Apache Mavem que desejam desenvolver uma aplicação utilizando arquitetura ReST com Spring Boot, Spring Data, Spring Test e PostgreSQL.
+        
+        \item Um sistema para monitoramento de servidores Linux utilizando arquitetura ReST, denominado MonitorWeb. Este é constituído de duas aplicações: a primeira, uma aplicação cliente denominada MonitorWeb-Cli, que realiza o monitoramento de CPU, memória e \textit{swap} em intervalos definidos de acordo com o usuário, além de permitir a realização de procedimentos de \textit{backup} e \textit{vacuum} em tempos esporádicos. A segunda, consiste em uma aplicação servidor (\textit{web service}) que recebe os dados de monitoramento das aplicações cliente e disponibiliza as informações por meio do padrão ReST para que outras aplicações possam utiliza-las.
+    \end{itemize}
+    
+\section{Dificuldades Encontradas}
+    \begin{itemize}
+        \item No início da implementação, encontrou-se bastante dificuldade para se adaptar a linguagem C++, uma vez que o autor deste trabalho possui pouca experiência com a linguagem. Além disso, foram encontradas algumas dificuldades para configurar a IDE, o compilador C++ e as bibliotecas de dependência do projeto, além do tempo de estudo da linguagem que levou mais de 30 dias para adaptação. Por ser uma linguagem de ampla utilização, existem muitos fóruns de dúvidas que ajudaram durante o desenvolvimento.
+        
+        \item No processo de comunicação entre as aplicações não foi encontrado uma biblioteca C++ de comunicação com \textit{web services} utilizando o protocolo HTTP/1.1. Com esse problema foi preciso desenvolver rapidamente uma forma de realizar essas requisições já que este fator era de extrema importância para o trabalho. Por esse fato, muito teve que ser estudado sobre o protocolo HTTP/1.1 até a solução utilizada: a biblioteca boots::asio. Essa biblioteca realiza conexões utilizando \textit{sockets} para que a requisição HTTP/1.1 seja escrita manualmente.
+        
+        \item Durante a fase de implementação houve dificuldade em estudar muitas tecnologias em tão pouco tempo. Além das próprias linguagem C++ e Java, foi estudado: Boost::asio, Boost::ptree, Spring Framework, Spring Boot, Spring Data, Spring Data JPA, HQL, Spring Test, JUnit, Hamcrest, Mockito, JsonPath, Apache Maven, Valgrind, SQL, PostgreSQL e H2. Também foi estudado a base dos conceitos dessas tecnologias, tais como: arquitetura cliente-servidor, \textit{web services}, HTTP/1.1, arquitetura ReST e testes automatizados.
+        
+        \item Durante o desenvolvimento do \textit{web service}, encontrou-se dificuldade para realizar o mapeamento JPA das entidades, principalmente em relação a data e fuso-horário. Para solução desse problema, uma configuração no appplication.properties foi realizada.
+ 
+        \item No processo de validação da aplicação cliente pelo sistema de depuração Valgrind, muitos erros de alocação de memória e \textit{threads} foram encontrados, levando vários dias para serem completamente resolvidos.
+    \end{itemize}
+
+\section{Trabalhos Futuros}
+    Nas subseções a seguir estão descritas as possíveis implementações futuras para este trabalho, divididas em três partes: Na \autoref{subsec:FuturosMonitorWeb-Api} estão descritas as possíveis implementações do sistema MonitorWeb-Api. Na \autoref{subsec:FuturosMonitorWeb-Cli} contém implementações que podem ser feitas no sistema MonitorWeb-Cli. Na \autoref{subsec:mista} estão implementações que teriam que ser feitas em ambas as aplicações.
+    
+\subsection{MonitorWeb-Api}\label{subsec:FuturosMonitorWeb-Api}
+    \begin{itemize}
+        \item Criar uma aplicação de frontend para que usuários realizem o cadastro de novos servidores, façam configurações e visualize os gráficos dos monitoramentos;
+    
+        \item Criar filtros para os recursos, tais como consulta por período e consulta por usuário;
+        
+        \item Analisar a viabilidade da substituição do banco de dados relacional para um não relacional, uma vez que essa experiencia pode apresentar um ganho significativo nas operações de inserção no banco de dados, consequentemente melhorando a capacidade de monitoramento de múltiplos clientes.
+    \end{itemize}
+
+
+\subsection{MonitorWeb-Cli}\label{subsec:FuturosMonitorWeb-Cli}
+    \begin{itemize}
+        \item Analisar a substituição das \textit{threads} por I/O assíncronos e não bloqueantes para diminuir o consumo de recursos da aplicação cliente, consequentemente, diminuindo o uso de CPU e memória;
+        
+        \item Realizar a leitura das informações usando-se chamadas de sistema ao invés de leituras de arquivos no disco (método como é feito atualmente).
+    \end{itemize}
+
+
+\subsection{Modificações Gerais}\label{subsec:mista}
+    \begin{itemize}
+        \item Criar o monitoramento de HD/SSD e placas de rede;
+        
+        \item Realizar o monitoramento de outros banco de dados, tais como Oracle, MySQL, Firebird, MongoDB, SQLite e outros.
+        
+        \item Realizar a avaliação e implementação do protocolo UDP em determinadas comunicações com o servidor, diminuindo o consumo de dados pela rede e o processamento da aplicação MonitorWeb-Api, evitando assim o gasto da criação dos pacotes de rede durante as requisições.
+        
+        \item Realizar a inserção do Spring Security para que as transações entre as aplicações sejam criptografadas.
+        
+        \item Analisar a utilização do protocolo SNMP (\textit{Simple Network Management Protocol}) para o monitoramento de outros aparelhos ligados a rede, como impressoras, \textit{racks}, roteadores, \textit{nobreaks} e outros.
+    \end{itemize}

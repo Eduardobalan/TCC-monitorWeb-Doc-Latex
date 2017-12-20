@@ -12,27 +12,42 @@
 
 \chapter{Desenvolvimento}\label{cap:Desenvolvimento}
 
-Neste trabalho foi desenvolvido um sistema para monitoramento de servidores Linux, utilizando a arquitetura cliente-servidor.
-O sistema consiste em duas aplicações, um \textit{web service} desenvolvido em Java para o qual foi dado o nome de MonitorWeb-Api, e outra aplicação em C++, executada nos servidores Linux como cliente, tendo o nome de MonitorWeb-Cli.
+Neste trabalho foi desenvolvido um sistema para monitoramento de servidores Linux, utilizando a arquitetura cliente-servidor. O sistema consiste em duas aplicações, um \textit{web service} desenvolvido em Java para o qual foi dado o nome de MonitorWeb-Api, e outra aplicação em C++, executada nos servidores Linux como cliente, tendo o nome de MonitorWeb-Cli.
 
-O MonitorWeb-Cli realiza leitura dos dados de seu hospedeiro, tais como CPU (\textit{Central Processing Unit}), memória, banco dados e \textit{swap}. Esse procedimento é realizado de acordo com a configuração de tempo desejada pelo usuário. Para cada leitura realizada, o sistema realiza o envio dos dados para o MonitorWeb-Api. Ele também pode realizar rotinas de \textit{backups} (cópia de segurança) e \textit{vaccum} (processo de limpeza no banco de dados) do banco dados PostgreSQL, tanto no hospedeiro quanto em outro computador a qual tenha acesso pela rede. Após efetuar esses procedimentos, o MonitorWeb-Cli envia mensagens para o MonitorWeb-Api que por sua vez armazena essas informações.
+O MonitorWeb-Cli realiza a leitura dos dados de seu hospedeiro, tais como CPU (\textit{Central Processing Unit}), memória, banco de dados e \textit{swap}. Esse procedimento é realizado de acordo com a configuração de tempo desejada pelo usuário. Para cada leitura realizada, o sistema realiza o envio dos dados para o MonitorWeb-Api. Ele também pode realizar rotinas de \textit{backups} (cópia de segurança) e \textit{vaccum} (processo de limpeza no banco de dados) do banco dados PostgreSQL, tanto no hospedeiro quanto em outro computador a qual tenha acesso pela rede. Após efetuar esses procedimentos, o MonitorWeb-Cli envia mensagens para o MonitorWeb-Api que por sua vez armazena essas informações.
 
-Um MonitorWeb-Api é responsável por receber os dados de diversos MonitorWeb-Cli e realizar a persistência no banco de dados. Também é responsável por armazenar as configurações dos clientes, tais como o intervalo de envio dos dados de monitoramento e as informações dos procedimentos de \textit{backup}. Essas configurações são capturadas periodicamente conforme as configurações do usuário. A \textbf{API} também pode ser utilizada para disponibilizar os dados dos servidores para aplicações de \textit{frontend} (DEFINIR O QUE É FRONTEND).
+Um MonitorWeb-Api é responsável por receber os dados de diversos MonitorWeb-Cli e realizar a persistência no banco de dados. Também é responsável por armazenar as configurações dos clientes, tais como o intervalo de envio dos dados de monitoramento e as informações dos procedimentos de \textit{backup}. Essas configurações são capturadas periodicamente conforme as configurações do usuário. A API também pode ser utilizada para disponibilizar os dados dos servidores para aplicações de \textit{frontend} (aplicações responsáveis por coletar a entrada do usuário e processá-la para adequá-la a uma especificação em que o back-end possa utilizar).
 
+Na \autoref{Img:MonitorWeb-Api} e na \autoref{Img:MonitorWeb-Cli} se faz uma ilustração das principais tecnologias utilizadas na implementação da aplicação MonitorWeb-Api e MonitorWeb-Cli, respectivamente.
 
-%Como visto no capitulo \autoref{sec:ArquiteturaClienteServidor}, na arquitetura cliente-servidor, há um hospedeiro sempre em funcionamento denominado servidor, que atende a requisições de muitos outros hospedeiros. Para essa sistema foi dada nome de MonitorWeb-Api. Do outro lado dessa arquitetura temos os sistemas denominados clientes, e estes podem estar em funcionamento às vezes ou sempre. Para esse sistema foi dado o nome de MonitorWeb-Cli.
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.5\textwidth]{figuras/MonitorWeb/monitorWeb-Api.jpg}
+	\caption[Ilustração das tecnologias utilizadas no MonitorWeb-Api]{Ilustração das tecnologias utilizadas no MonitorWeb-Api. A aplicação pode ser executada nos sistemas operacionais Linux, Windows e MacOS. Esta aplicação foi desenvolvida em Java e utilizou o banco de dados PostgreSQL para a persistência dos dados. Os principais \textit{frameworks} utilizados foram: Spring Boot, Spring Framework, Spring Data}
+	\label{Img:MonitorWeb-Api}
+\end{figure}
 
-%Os dados monitorados são CPU (Central Processing Unit), memoria, swap e postgresql. Esses dados são lidos da maquina hospedeira cliente e enviado para o sistema servidor, que tem a função de receber e armazenar essas informações de forma persistente, para disponibiliza-las mais tarde.
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.5\textwidth]{figuras/MonitorWeb/monitorWeb-Cli.jpg}
+	\caption[Ilustração das tecnologias utilizadas no MonitorWeb-Cli]{Ilustração das tecnologias utilizadas no MonitorWeb-Cli. A aplicação foi desenvolvida para o sistema operacional Linux utilizando a linguagem C++. Esta aplicação fez uso da biblioteca Boost para fazer requisições HTTP e permite a realização dos procedimentos de \textit{backup} e \textit{vacuum} em bancos de dados PostgreSQL.}
+	\label{Img:MonitorWeb-Cli}
+\end{figure}
 
 \section{MonitorWeb-Api}\label{sec:MonitorWeb-Api}
 
-O MonitorWeb-Api é um \textit{web service} desenvolvido utilizando a tecnologia Spring Boot para o desenvolvimento de uma aplicação ReST que utiliza o protocolo HTTP/1.1 na comunicação com sistema clientes. A forma de passar dados entre os sistema foi utilizado o JSON (\textit{JavaScript Object Notation}) em vez do XML por ter sua estrutura menor e consumir menos trafego na rede \cite{Saudate:2014}. Para a persistência dos dados foi utilizado o banco de dados PostgreSQL [\cite{Postgres}].
+O MonitorWeb-Api é um \textit{web service} desenvolvido utilizando a tecnologia Spring Boot para o desenvolvimento de uma aplicação ReST que utiliza o protocolo HTTP/1.1 na comunicação com sistemas clientes. Para enviar os dados entre as aplicações foi utilizado o JSON (\textit{JavaScript Object Notation}) em vez do XML por ter sua estrutura menor e consumir menos trafego na rede \cite{Saudate:2014}. Para a persistência dos dados foi utilizado o banco de dados PostgreSQL \cite{PostgreSQL:2017}.
 
-Um MonitorWeb-Api possui a capacidade de trabalhar com diversos MonitorWeb-Cli simultaneamente. A classe Servidor, descrita na \autoref{Tab:VariaveisServidor} representa o MonitorWeb-Cli.
+Um MonitorWeb-Api possui a capacidade de trabalhar com diversos MonitorWeb-Cli simultaneamente, conforme exibido na \autoref{Img:CliApi}.
 
-A \autoref{subsec:ConsumindoRecursos} descreve como realizar o cadastro dos recursos ReST do \textit{web-service}. 
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.7\textwidth]{figuras/MonitorWeb/MonitorWeb-CliComMonirotWeb-Api.jpg}
+	\caption[Comunicação entre o MonitorWeb-Api e as aplicações MonitoresWeb-Cli]{Comunicação entre o MonitorWeb-Api e as aplicações MonitoresWeb-Cli. Um MonitorWeb-Api pode receber requisições de diversos MonitoresWeb-Cli, executando uma ação na base de dados e retornando uma resposta em formato JSON.}
+	\label{Img:CliApi}
+\end{figure}
 
-%O MonitorWeb-Api possui uma classe central chamado de Servidor. A partir do cadastro de um objeto dessa classe e o cadastro de um objeto da classe ServidorConfig e ambos estando relacionados, a aplicação já está configurada para trabalhar com o MonitorWeb-Cli. Na \autoref{Tab:VariaveisServidor} e na \autoref{Tab:VariaveisServidorConfig} estão as variáveis e a descrição das classe Servidor e ServidorConfig respectivamente. Como realizar o cadastro desses recursos é mostrado na \autoref{subsec:ConsumindoRecursos}. 
+Os atributos da classe Servidor, descritos na \autoref{Tab:VariaveisServidor} representa um MonitorWeb-Cli.
 
 \begin{table}[!ht]
 \centering
@@ -50,16 +65,17 @@ observacao                             & \multicolumn{1}{p{13.00cm}|}{Alguma obs
 \label{Tab:VariaveisServidor}
 \end{table}
 
-\subsection{Diagrama De Classes}\label{subsec:DiagramaDeClasses}
+
+\subsection{Diagrama de Classes}\label{subsec:DiagramaDeClasses}
 
 Um diagrama de classe pode ser visto na \autoref{Img:DiagramaDeClass1}, em que é mostrado resumidamente o relacionamento da classe Servidor com as outras classes da aplicação. Esse diagrama está separado em três partes enumeradas, descritas a seguir.
 
 \begin{itemize}
 		\item \autoref{Img:DiagramaDeClass1}, Grupo 1. As classes desse grupo possuem o prefixo Servidor e correspondem às configurações da aplicação e as configurações de rotinas do banco de dados.
-		\item \autoref{Img:DiagramaDeClass1}, Grupo 2. Classes desse grupo possuem o prefixo Informacoes. Estas, representam registros cadastrados automaticamente pela aplicação MonitorWeb-Cli e fazem referência às informações do \textit{hardware} (componentes físicos de um computador). Os registros dessas classes são armazenados apenas no momento de inicialização do sistema, pois os valores não podem ser alterados sem a reinicialização da máquina. Exemplos desses valores são o modelo do processador e a quantidade de memoria física. A descrição de cada classe desse grupo pode ser vista no \autoref{App:ApendiceA}.
+		\item \autoref{Img:DiagramaDeClass1}, Grupo 2. Classes desse grupo possuem o prefixo Informacoes. Estas, representam registros cadastrados automaticamente pela aplicação MonitorWeb-Cli e fazem referência às informações do \textit{hardware} (componentes físicos de um computador). Os registros dessas classes são armazenados apenas no momento de inicialização do sistema, pois os valores não podem ser alterados sem a reinicialização da máquina. Exemplos desses valores são o modelo do processador e a quantidade de memória física. A descrição de cada classe desse grupo pode ser vista no \autoref{App:ApendiceA}.
 		%\item \autoref{Img:DiagramaDeClass1} grupo número 2 (classes desse grupo possuem o prefixo Informacoes) são classes que serão cadastradas automaticamente pela aplicação MonitorWeb-Cli e fazem referencia a os valores do servidor que são inseridos a cade vez que a aplicação é iniciada. Esses tipos de valores não tem como ser mudado sem que a maquina seja reiniciada. Um exemplos desse valor é o modelo do processador, ele nunca será mudado sem que a maquina seja reiniciada.
 		\item \autoref{Img:DiagramaDeClass1}, Grupo 3. Classes desse grupo possuem o prefixo Monitoramento. Os objetos dessas classes representam registros gerados automaticamente pelo MonitorWeb-Cli com os valores de desempenho de \textit{hardware} e \textit{software} monitorados periodicamente. Exemplos dos valores armazenados por objetos dessas classes são: quantidade de memória e CPU que estão sendo utilizadas, situação dos procedimentos de \textit{backups}. A descrição de cada classe desse grupo pode ser vista no \autoref{App:ApendiceA}
-		%\item \autoref{Img:DiagramaDeClass1} grupo número 3 (classes desse grupo possuem o prefixo Monitoramento) são classes que contem valores que precisam ser monitorados de tempos em tempo. Os intervalos de tempo do monitoramento das classe MonitoramentoCpu, MonitoramentoMemoria e MonitoramentoSwap são configurado através do objeto "ServidorConfig" como pode ser visto pela \autoref{Tab:VariaveisServidorConfig}. Exemplos dos valores armazenados por objetos dessa classe são quanto de memoria está sendo utilizado e quantos Mhz cada núcleo do processador está utilizado.
+		%\item \autoref{Img:DiagramaDeClass1} grupo número 3 (classes desse grupo possuem o prefixo Monitoramento) são classes que contem valores que precisam ser monitorados de tempos em tempo. Os intervalos de tempo do monitoramento das classe MonitoramentoCpu, MonitoramentoMemoria e MonitoramentoSwap são configurado através do objeto "ServidorConfig" como pode ser visto pela \autoref{Tab:VariaveisServidorConfig}. Exemplos dos valores armazenados por objetos dessa classe são quanto dememória está sendo utilizado e quantos Mhz cada núcleo do processador está utilizado.
 \end{itemize}
 
 
@@ -189,7 +205,7 @@ Além das duas classes, existe a classe UsuarioHasDominio que é simplesmente um
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=1.0\textwidth]{figuras/DiagramaDeClass4.jpg}
-	\caption[Diagrama de classe resumido 3.]{Diagrama de classe resumido 4, separados pelos grupos 1 à 5 que correspondem respectivamente a configurações que o usuário deve fazer, informações geradas pelo MonitorWeb-Cli, monitoramentos gerados pelo MonitorWeb-Cli, enums da aplicação e cadastro de usuários.}
+	\caption[Diagrama de classe resumido 4.]{Diagrama de classe resumido 4, separados pelos grupos 1 à 5 que correspondem respectivamente a configurações que o usuário deve fazer, informações geradas pelo MonitorWeb-Cli, monitoramentos gerados pelo MonitorWeb-Cli, enums da aplicação e cadastro de usuários.}
 	\label{Img:DiagramaDeClass4}
 \end{figure}
 
@@ -232,60 +248,9 @@ A seguir estão as principais dependências do projeto MonitorWeb-Api.
 \end{itemize}
 
 
-\begin{lstlisting}[style=XML,label=Func:POMMonitorWebApi,caption={[Arquivo POM com as principais dependências do projeto.]Arquivo POM com as principais dependências do projeto.}]
-	<parent>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-parent</artifactId>
-			<version>1.3.3.RELEASE</version>
-			<relativePath/>
-	</parent>
-	
-	<dependency>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-starter-data-jpa</artifactId>
-	</dependency>
-	
-	<dependency>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-starter-web</artifactId>
-	</dependency>
+\subsection{Configurações Spring Boot}\label{subsec:ConfiguraçõesApplicationProperties}
 
-	<dependency>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-starter-logging</artifactId>
-	</dependency>
-
-	<dependency>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-starter-test</artifactId>
-		<scope>test</scope>
-	</dependency>
-				
-	<dependency>
-		<groupId>org.postgresql</groupId>
-		<artifactId>postgresql</artifactId>
-		<version>${postgresql.version}</version>
-	</dependency>
-
-	<dependency>
-		<groupId>com.github.springtestdbunit</groupId>
-		<artifactId>spring-test-dbunit</artifactId>
-		<version>${spring-test-dbunit.version}</version>
-		<scope>test</scope>
-	</dependency>
-
-	<dependency>
-		<groupId>com.h2database</groupId>
-		<artifactId>h2</artifactId>
-		<scope>test</scope>
-	</dependency>
-\end{lstlisting}
-
-
-
-\subsection{Configurações application.properties}\label{subsec:ConfiguraçõesApplicationProperties}
-
-O Spring Boot fornece um arquivo de configuração com o nome de application.properties, e pode ser encontrado na pasta \url{/src/main/resources/application.properties}. Dentro desse arquivo pode ser feitas configurações de acordo com a necessidade do projeto \cite{springBoot:2017}. No \autoref{Func:applicationProperties} encontra-se o application.properties do MonitoreWeb-Api e a seguir uma lista contendo a descrição de cada configuração.
+O Spring Boot fornece um arquivo de configuração com o nome de application.properties, e pode ser encontrado na pacote \url{/src/main/resources}. Dentro desse arquivo pode ser feitas configurações de acordo com a necessidade do projeto \cite{springBoot:2017}. No \autoref{Func:applicationProperties} encontra-se o application.properties do MonitoreWeb-Api e a seguir uma lista contendo a descrição de cada configuração.
 
 \begin{itemize}
 		\item \autoref{Func:applicationProperties}, linha 2: server.port - Porta em que a aplicação será executada \cite{springBoot:2017}.
@@ -296,13 +261,13 @@ O Spring Boot fornece um arquivo de configuração com o nome de application.pro
 		
 		\item \autoref{Func:applicationProperties}, linha 19: spring.datasource.url - URL de conexão para o banco de dados \cite{springBoot:2017}.
 		
-		\item \autoref{Func:applicationProperties} linha 20: spring.datasource.username - Usuario do banco de dados \cite{springBoot:2017}.
+		\item \autoref{Func:applicationProperties}, linha 20: spring.datasource.username - Usuario do banco de dados \cite{springBoot:2017}.
 		
-		\item \autoref{Func:applicationProperties} linha 21: spring.datasource.password - Senha do banco de dados \cite{springBoot:2017}.
+		\item \autoref{Func:applicationProperties}, linha 21: spring.datasource.password - Senha do banco de dados \cite{springBoot:2017}.
 		
-		\item \autoref{Func:applicationProperties} linha 22: spring.jpa.database-platform - Vários bancos de dados têm mais de um dialeto e essa propriedade especifica qual o hibernate irá utilizar \cite{springBoot:2017}.
+		\item \autoref{Func:applicationProperties}, linha 22: spring.jpa.database-platform - Vários bancos de dados têm mais de um dialeto e essa propriedade especifica qual o hibernate irá utilizar \cite{springBoot:2017}.
 		
-		\item \autoref{Func:applicationProperties} linha 23: spring.datasource.driverClassName - Classe do \textit{driver} que será utilizado para conexão \cite{springBoot:2017}.
+		\item \autoref{Func:applicationProperties}, linha 23: spring.datasource.driverClassName - Classe do \textit{driver} que será utilizado para conexão \cite{springBoot:2017}.
 		
 \end{itemize}
 
@@ -334,13 +299,9 @@ O projeto é dividido em seis pacotes Java que podem ser vistos na \autoref{Img:
 	\includegraphics[width=0.5\textwidth]{figuras/estruturaPojeto.JPG}
 	\caption[Estrutura dos pacotes Java do projeto.]{Estrutura dos pacotes Java do projeto.}
 	\label{Img:estruturaDePastaPojeto}
-	
-	%width=0.5\textwidth (Tamanho da Imagem)
 \end{figure}
 	
-% Please add the following required packages to your document preamble:
-% \usepackage[table,xcdraw]{xcolor}
-% If you use beamer only pass "xcolor=table" option, i.e. \documentclass[xcolor=table]{beamer}
+
 \begin{table}[!ht]
 \centering
 \begin{tabular}{|l|l|}
@@ -353,7 +314,7 @@ exception                                                   & \multicolumn{1}{p{
 repository                                                  & \multicolumn{1}{p{10.00cm}|}{Interfaces para gerar os acessos ao banco de dados. \autoref{subsubsec:Repository}.}\\ \hline
 service                                                     & \multicolumn{1}{p{10.00cm}|}{Responsáveis pelos serviços da aplicação. \autoref{subsubsec:Service}.}\\ \hline
 \end{tabular}
-\caption{Descrição das pastas do projeto.}
+\caption{Descrição das pacotes do projeto.}
 \label{Tab:DescricaoDasPastasProjeto}
 \end{table}
 
@@ -369,14 +330,14 @@ Na \autoref{Img:estruturaDePastaRepository} pode ser visto que cada entidade da 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.5\textwidth]{figuras/estruturaPojetoRepository.JPG}
-	\caption[Pasta Repository.]{Pasta Repository.}
+	\caption[Pacote Repository.]{Pacote Repository.}
 	\label{Img:estruturaDePastaRepository}
 \end{figure}
 
 
 \subsubsection{Business}\label{subsubsec:business}
 
-A pasta business é responsável pelas regras de negocio da aplicação. Cada entidade contém uma classe business correspondente que segue o padrão de nomenclatura: <nome-da-entidade> mais "BO", como pode ser visto na \autoref{Img:estruturaDePastaBusiness}. 
+O pacote business é responsável pelas regras de negocio da aplicação. Cada entidade contém uma classe business correspondente que segue o padrão de nomenclatura: <nome-da-entidade> mais "BO", como pode ser visto na \autoref{Img:estruturaDePastaBusiness}. 
 
 Todas as classes da business herdam a classe GenericBO que Contém os métodos genéricos de inserção e exclusão do banco de dados. 
 
@@ -385,7 +346,7 @@ A GenericBO recebe dois parâmetros: o primeiro, um tipo genérico Entity que de
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.5\textwidth]{figuras/estruturaPojetoBusines.JPG}
-	\caption[Pasta Business.]{Pasta Business.}
+	\caption[Pacote Business.]{Pacote Business.}
 	\label{Img:estruturaDePastaBusiness}
 \end{figure}
 
@@ -393,27 +354,17 @@ A GenericBO recebe dois parâmetros: o primeiro, um tipo genérico Entity que de
 
 \subsubsection{Service}\label{subsubsec:Service}
 
-As classes da pasta service são as responsáveis por receber as requisições HTTP e responde-las de acordo com a especificação da arquitetura ReST. Cada entidade da aplicação contém uma classe Service correspondente que segue o padrão de nomenclatura: <nome-da entidade> seguido da palavra "Service", como pode ser visto na \autoref{Img:estruturaDePastaService}.
+As classes do pacote service são as responsáveis por receber as requisições HTTP e responde-las de acordo com a especificação da arquitetura ReST. Cada entidade da aplicação contém uma classe Service correspondente que segue o padrão de nomenclatura: <nome-da-entidade> seguido da palavra "Service", como pode ser visto na \autoref{Img:estruturaDePastaService}.
 
-Cada classe possui uma URL destinada a gerenciar seus recursos. Essas URLs aceitam os métodos GET, POST e DELETE que correspondem, respectivamente, à listagem, inserção e remoção de um recurso. Na \autoref{Tab:UrlRecursos} mostra-se essas URLs, e na \autoref{subsec:ConsumindoRecursos} está explicado como utiliza-las.
-
-
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-- - - - - - - - - - - - - - - - - - - - Kleber continuar a revisão daqui - - - - - - - - - - - - - - - - - - - - - - - -
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+Cada classe possui uma URL destinada a gerenciar seus recursos. Essas URLs aceitam os métodos GET, POST e DELETE que correspondem, respectivamente, à listagem, inserção e remoção de um objeto do recurso. Na \autoref{Tab:UrlRecursos} mostra-se essas URLs, e na \autoref{subsec:ConsumindoRecursos} está explicado como utiliza-las.
 
 
-Na \autoref{Tab:UrlRecursos} os valores entre chaves representam o id do objeto a qual o recurso está relacionado. Por exemplo, na URL \url{/servidor/{idServidor}/informacoescpu}, o valor \{idServidor\} representa o id do Servidor a qual o objeto da classe InformacoesCpu está relacionado. Dessa forma essa requisição traz todos os objetos de InformacoesCpu relacionados com o Servidor de número \{idServidor\}.
-
-
+Na \autoref{Tab:UrlRecursos} os valores entre chaves representam o id do recurso à esquerda. Por exemplo, na URL \url{/usuario/7} está sendo feita uma requisição do recurso Usuario que tenha o id 7, e na URL \url{/servidor/11/informacoescpu} está sendo feita uma requisição do recurso InformaçõesCpu do servidor que tenha o id 11.
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.5\textwidth]{figuras/estruturaPojetoService.JPG}
-	\caption[Pasta Service.]{Pasta Service.}
+	\caption[Pacote Service.]{Pacote Service.}
 	\label{Img:estruturaDePastaService}
 \end{figure}
 
@@ -443,54 +394,294 @@ ServidorConfig                   & \multicolumn{1}{p{9.00cm}|}{\url{/servidor/{i
 \end{table}
 
 
-\subsection{Consumindo recursos do MonitorWeb-Api}\label{subsec:ConsumindoRecursos}
+\subsection{Consumindo Recursos do MonitorWeb-Api}\label{subsec:ConsumindoRecursos}
 
-Os recursos do MonitorWeb-Api são consumidos utilizando o protocolo HTTP. Nas subseção a seguir será mostrado como utilizar os recursos da aplicação.
+Os recursos do MonitorWeb-Api são consumidos utilizando o protocolo HTTP e seguindo o padrão ReST. Os métodos GET, PUT e DELETE servem, respectivamente, para consultar, inserir e excluir elementos na base de dados.
 
-Todos os exemplos a seguir supõem que o MonitorWeb-Api esteja rodando no ip 127.0.0.1 e utilizando a porta 8081. 
+\subsubsection{GET}
+O método GET pode ser utilizado de duas formas: a primeira traz um vetor com todos os objetos do recurso. Na URL \url{/servidor}, por exemplo, é retornado um vetor no formato \textit{json} contendo todos os objetos Servidor, conforme exibido no \autoref{Func:ConsumindoRecursosGet1}. A segunda forma é solicitar por um objeto específico mediante a um id. Como exemplo, na URL \url{/servidor/2}, a API retorna apenas o servidor cujo id é igual a 2 (\autoref{Func:ConsumindoRecursosGet2}).
 
-\subsubsection{Get}
-
-
-
-\begin{lstlisting}[label=Func:GETExemplo,caption={[].}]
-GET /servidor HTTP/1.1
-Host: 127.0.0.1:8081
-Accept: application/json
+\begin{lstlisting}[label=Func:ConsumindoRecursosGet1,caption={[Exemplo do vetor de resposta à solicitação GET para URL \url{/servidor}.]Exemplo do vetor de resposta à solicitação GET para URL \url{/servidor}.}]
+[
+    {
+        "id": 1,
+        "dominio": {
+            "id": 1
+        },
+        "dthr_cadastro": "2017-01-02T03:11:18.075+0000",
+        "nome": "Nome do Servidor 1",
+        "empresa": "Empresa 1",
+        "observacao": "OBS 1"
+    },
+    {
+        "id": 2,
+        "dominio": {
+            "id": 2
+        },
+        "dthr_cadastro": "2017-01-03T03:01:59.099+0000",
+        "nome": "Nome do Servidor 2",
+        "empresa": "Empresa 2",
+        "observacao": "OBS 2"
+    }
+]    
 \end{lstlisting}
 
 
-\begin{lstlisting}[label=Func:RespostaExemplo,caption={[]}]
-HTTP/1.1 200 OK
-Content-Type: plication/json
-Content-Length: 316
+
+
+
+\begin{lstlisting}[label=Func:ConsumindoRecursosGet2,caption={[Exemplo do objeto de resposta a solicitação GET para URL \url{/servidor/2}.]Exemplo do objeto de resposta a solicitação GET para URL \url{/servidor/2}.}]
 {
-    "id": 1,
+    "id": 2,
     "dominio": {
-        "id": 1,
-        "nome": "Nome do Dominio",
-        "dthr_cadastro": "2017-01-01T03:00:00.000+0000",
-        "observacao": "Observação do Dominio"
+        "id": 2
     },
-    "dthr_cadastro": "2017-01-02T03:00:00.000+0000",
-    "nome": "Nome do Servidor",
-    "empresa": "empresa 1",
-    "observacao": "OBS"
+    "dthr_cadastro": "2017-01-03T03:01:59.099+0000",
+    "nome": "Nome do Servidor 2",
+    "empresa": "Empresa 2",
+    "observacao": "OBS 2"
 }
 \end{lstlisting}
+
+\subsubsection{POST}
+
+O método POST é utilizado para inserir um novo objeto a um recurso. Por exemplo, para inserir um novo servidor no sistema, uma requisição POST deve ser realizada para a URL \url{/servidor} passando o objeto desejado, conforme mostra-se no \autoref{Func:ConsumindoRecursosPost1}. A resposta desta requisição é vista no \autoref{Func:ConsumindoRecursosPost2}.
+
+
+\begin{lstlisting}[label=Func:ConsumindoRecursosPost1,caption={[Exemplo de uma requisição POST]Exemplo de uma requisição POST onde é passado o objeto que deseja ser inserido.]
+POST /servidor HTTP/1.1
+Host: 127.0.0.1:8081
+Accept: application/json
+{
+    "dominio": {
+        "id": 3
+    },
+    "nome": "Nome do Servidor 3",
+    "empresa": "Empresa 3",
+    "observacao": "OBS 3"
+}
+\end{lstlisting}
+
+\begin{lstlisting}[label=Func:ConsumindoRecursosPost2,caption={[Exemplo de uma resposta a uma requisição POST] Exemplo de uma resposta a uma requisição POST}]
+HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 197
+{
+    "id": 3,
+    "dominio": {
+        "id": 3
+    },
+    "dthr_cadastro": "2017-01-03T03:45:29.099+0000",
+    "nome": "Nome do Servidor 3",
+    "empresa": "Empresa 3",
+    "observacao": "OBS 3"
+}
+\end{lstlisting}
+
+\subsubsection{DELETE}
+
+Uma requisição de DELETE é utilizada para remover um recurso da aplicação. Por exemplo, caso seja desejado remover o objeto de id 1, uma requisição utilizando-se o método DELETE para o recurso \url{/servidor/1} é enviada. Entretanto, utilizar esse método não garante a exclusão do recurso, uma vez que é necessário verificar a consistência do banco de dados. Caso o elemento a ser removido tenha relacionamento com outros objetos, o banco de dados impede sua remoção.
 
 %# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 
 
 \section{MonitorWeb-Cli}\label{sec:MonitorWeb-Cli}
 
+O MonitorWeb-Cli é um sistema cliente desenvolvido para executar em servidores Linux, de forma que todos os servidores monitorados executem uma única instância dessa aplicação. Esse sistema foi implementado utilizando-se a linguagem C++, porque tem como objetivo ler as informações e monitorar o desempenho do hardware, tais o desempenho de CPU e memórias, e enviar essas informações mediante a comunicação com um servidor ReST, utilizando-se o protocolo HTTP/1.1. Cada MonitorWeb-Cli possui a capacidade de enviar informações para um único MonitorWeb-Api.
+
+\subsection{Configurações MonitorWeb-Cli}\label{subsubsec:ConfiguracesMonitorWeb-Cli}
+
+O MonitorWeb-Cli possui dois arquivos de configurações: o ConfigLog.conf e o  ConfigFile.conf que devem estar no mesmo diretório do executável da aplicação.
+
+\subsubsection{ConfigLog.conf}\label{subsubsec:ConfiguracesMonitorWeb-CliConfiglog}
+
+O arquivo de configurações ConfigLog.conf é responsável por ativar e desativar os níveis de log da aplicação. Ele também gera um arquivo de log com nome de log.log que fica no mesmo diretório da aplicação. A \autoref{Tab:DescricaoArquivoConfiglog.conf} mostra os valores do arquivo ConfigLog.conf e suas descrições. No \autoref{Func:ExemploArquivoConfiglog.conf} é mostrado um e exemplo do arquivo ConfigLog.conf.
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|l|}
+\hline
+{\color[HTML]{000000} \textbf{Variável}} & {\color[HTML]{000000} \textbf{Valor}}                                                                \\ \hline
+ativarEmTelaInfo                         & \multicolumn{1}{p{11.00cm}|}{Valor true ou false. Ativa ou desativa o log do tipo informações que é mostrado na tela do usuário.} \\ \hline
+ativarEmTelaWarning                      & \multicolumn{1}{p{11.00cm}|}{Valor true ou false. Ativa ou desativa o log do tipo warning que é mostrado na tela do usuário.} \\ \hline
+ativarEmTelaErro                         & \multicolumn{1}{p{11.00cm}|}{Valor true ou false. Ativa ou desativa o log do tipo erro que é mostrado na tela do usuário.}\\ \hline
+ativarEmArquivoInfo                      & \multicolumn{1}{p{11.00cm}|}{Valor true ou false. Ativa ou desativa o log do tipo informações no arquivo log.log.}\\ \hline
+ativarEmArquivoWarning                   & \multicolumn{1}{p{11.00cm}|}{Valor true ou false. Ativa ou desativa o log do tipo warning no arquivo log.log.}\\ \hline
+ativarEmArquivoErro                      & \multicolumn{1}{p{11.00cm}|}{Valor true ou false. Ativa ou desativa o log do tipo erro no arquivo log.log.}\\ \hline
+\end{tabular}
+\caption[Descrição do arquivo ConfigLog.conf.]{Descrição de cada variável do arquivo ConfigLog.conf.}
+\label{Tab:DescricaoArquivoConfiglog.conf}
+\end{table}
+
+\begin{lstlisting}[label=Func:ExemploArquivoConfiglog.conf,caption={[Exemplo de um arquivo ConfigLog.conf]Exemplo de um arquivo ConfigLog.conf}]
+ativarEmTelaInfo:false
+ativarEmTelaWarning:true
+ativarEmTelaErro:true
+
+ativarEmArquivoInfo:false
+ativarEmArquivoWarning:true
+ativarEmArquivoErro:true
+\end{lstlisting}
+
+\subsubsection{ConfigFile.conf}\label{subsec:ConfiguracesMonitorWeb-CliConfigFile}
+
+O arquivo de configurações ConfigFile.conf é responsável pelas configurações da aplicação e sempre deve estar definido para a aplicação iniciar. Esse arquivo possui uma estrutura "chave e valor", com os mesmos atributos da classe ServidorConfig. Um exemplo pode ser visto no \autoref{Func:ExemploArquivoConfigFile.conf}. Quando o MonitoreWeb-Cli está em execução, esse arquivo é atualizado constantemente com a classe ServidorConfig do MonitorWeb-Api. Dessa forma, por meio do sistema servidor o usuário pode fazer dinamicamente alterações no sistema cliente. A \autoref{Tab:VariaveisArquivoConfigFile} mostra os valores do arquivo ConfigFile.conf e suas descrições.
+
+
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|l|}
+\hline
+{\color[HTML]{000000} \textbf{Variáveis}} & {\color[HTML]{000000} \textbf{Descriçães}} \\ \hline
+id                                     & \multicolumn{1}{p{10.00cm}|}{Id do objeto de ServidorConfig correspondente a essa configuração.} \\ \hline
+servidorid                             & \multicolumn{1}{p{10.00cm}|}{Informa com qual servidor esse registro está relacionado.}
+\\ \hline
+intervaloLeituraConfiguracoes          & \multicolumn{1}{p{10.00cm}|}{Intervalo em segundos para o MonitorWeb-Cli ler as configurações da classe ServidorConfig, e se reconfigurar(Valor padrão 120 s).} \\ \hline
+intervaloLeituraConfiguracoesDb        & \multicolumn{1}{p{10.00cm}|}{Intervalo em segundos para o  MonitorWeb-Cli ler as configurações da classe ServidorConfigDb, e se reconfigurar(Valor padrão 120 s). Essa classe é mostrada na \autoref{subsubsec:ClasseServidorConfigDb}} \\ \hline
+intervaloCpu                           & \multicolumn{1}{p{10.00cm}|}{Intervalo em segundos para o MonitorWeb-Cli enviar um registro da classe MonitoramentoCpu.(Valor padrão 1 s)}\\ \hline
+intervaloMemoria                       & \multicolumn{1}{p{10.00cm}|}{Intervalo em segundos para o MonitorWeb-Cli enviar um registro da classe MonitoramentoMemoria.(Valor padrão 1 s)}\\ \hline
+intervaloSwap                          & \multicolumn{1}{p{10.00cm}|}{Intervalo em segundos para o MonitorWeb-Cli enviar um registro da classe MonitoramentoSwap.(Valor padrão 1 s)} \\ \hline
+hostMonitoramento                      & \multicolumn{1}{p{10.00cm}|}{IP que o MonitorWeb-Cli deve se comunicar.}\\ \hline
+hostMonitoramento2                     & \multicolumn{1}{p{10.00cm}|}{IP secundário que o MonitorWeb-Cli deve se comunicar caso o servidor principal não esteja funcionando.(Essa funcionalidade não foi implementada)} \\ \hline
+porta                                  & \multicolumn{1}{p{10.00cm}|}{Porta da aplicação para o MonitorWeb-Cli saber em que porta o MonitorWeb-Api está rodando.} \\ \hline
+porta2                                 & \multicolumn{1}{p{10.00cm}|}{Porta da aplicação secundária para o MonitorWeb-Cli saber em que porta o MonitorWeb-Api está rodando.(Essa funcionalidade não foi implementada)} \\ \hline
+\end{tabular}
+\caption[Descrição do arquivo ConfigFile.conf.]{Descrição do arquivo ConfigFile.conf.}
+\label{Tab:VariaveisArquivoConfigFile}
+\end{table}
+
+\begin{lstlisting}[label=Func:ExemploArquivoConfigFile.conf,caption={[Exemplo de um arquivo configFile.conf]Exemplo de um arquivo configFile.conf}]
+id:1
+servidorid:1
+intervaloCpu:1
+intervaloLeituraConfiguracoes:120
+intervaloLeituraConfiguracoesDb:12
+intervaloMemoria:1
+intervaloSwap:1
+hostMonitoramento:192.168.1.147
+hostMonitoramento2:192.168.1.147
+porta:8081
+porta2:8081
+\end{lstlisting}
+
+
+\subsection{Diagrama de Classes}\label{subsec:DiagramaDeClassesMonitorwebcli}
+
+Um diagrama de classe pode ser visto na \autoref{Img:Cli-Diagrama}, em que é mostrado os relacionamentos das classes no sistema MonitoreWeb-Cli. Neste, a classe principal é a ServidorConfig, pois todas as outras necessitam de um objeto da referida classe, contendo as configurações de comunicação com o MonitorWeb-Api. 
+
+As classes das entidades do sistema MonitoreWeb-Cli apresentam os mesmos atributos das classes de entidade de MonitorWeb-Api, exceto que não há variáveis de controle de data (dthr\_cadastro e dthr\_alteracao), uma vez que esses dados são geradas pelo servidor. Ademais, possuem os seguintes atributos e métodos:
+
+\begin{itemize}
+	\item Métodos toJson: converte as variáveis do objeto em um JSON correspondente.
+	
+	\item Métodos fromJson: cria um objeto a partir de uma string em formato JSON.
+	
+	\item Métodos salvarConfiguracoesLocais: pertence a classe servidorConfig e é utilizado para salvar os valores do objeto no arquivo configFile.conf. 
+	
+	\item Métodos ler<nome-da-classe>:realizam a leitura das informações estáticas do hardware (aquelas que não são alteradas conforme a execução dos programas) da máquina hospedeira. Exemplo, a classe InformacoesCpu possui um método chamado "lerInformacoesCpu". Este, ao ser executado obtém as informações físicas da CPU, tais como o nome, o numero de \textit{cores} (núcleos), o tamanho da \textit{cache}, entre outras.
+	
+	\item Métodos monitorar<nome-da-classe>: esses métodos são responsáveis por enviar uma requisição POST para o MonitoreWeb-Api contendo as informações de monitoramento (dinâmicas) do hardware, tais como a taxa de uso da CPU ou a quantidade de memória física utilizada.
+	
+	\item Métodos sincronizarConfigLocalComApi: realiza uma requisição para o servidor ReST pedindo os dados das configurações atuais. Assim que as solicitações são recebidas, este método atualiza as configurações locais da máquina hospedeira. Este método é importante porque o usuário pode, em tempo real, modificar as configurações para, por exemplo, alterar o intervalo entre os monitoramentos. Por esse motivo, as aplicações cliente precisam verificar periodicamente (em intervalo também configurável) essas mudanças.
+    
+    \item Métodos threadSincronizarConfigLocalComApi: esses métodos criam uma \textit{thread} para ficar executando o método sincronizarConfigLocalComApi, independente do resto da aplicação.
+    
+    \item Métodos threadMonitorar<Nome-da-classe>:esses métodos criam uma \textit{thread} para ficar executando o método monitorar<nome-da-classe> independente do resto da aplicação.
+    
+    \item Variável *thread: toda classe possível de criar uma \textit{thread} de monitoramento possui este ponteiro, assim é possível interromper e remover a \textit{thread} quando o objeto é removido.
+\end{itemize}
+
+
+
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=1.0\textwidth]{figuras/diagramaBanco.jpg}
-	\caption[Pasta Entitybbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb.]{Pasta Entityaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.}
-	\label{Img:estruturaDePastaPojetoEntity}
+	\includegraphics[width=1.0\textwidth]{figuras/Cli-Diagrama.jpg}
+	\caption[Diagrama de classe do MonitoreWeb-Cli.]{Diagrama de classe do MonitoreWeb-Cli mostrando as relações entre as classes e dependências.}
+	\label{Img:Cli-Diagrama}
+\end{figure}
+
+
+\subsection{Estrutura do Projeto}\label{}
+
+O projeto é dividido em dois pacotes: o Entity, que contém as classes das entidades, descritas na \autoref{subsec:DiagramaDeClassesMonitorwebcli}; e o pacote Util, que contém as bibliotecas criadas neste projeto para atender a diversas finalidades, conforme descritas nas seguintes subseções. Além disso, contém a classe main.cpp, responsável por iniciar a aplicação. Essa classe é explicada na \autoref{subsec:executandoMonitorWeb-clie}.
+
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.5\textwidth]{figuras/pacotes-monitoreWeb-Cli.jpg}
+	\caption[Pacotes da aplicação MonitoreWeb-Cli.]{Pacotes da aplicação MonitoreWeb-Cli.}
+	\label{Img:Cli-Diagrama}
+\end{figure}
+
+
+
+\subsubsection{SystemLog}
+
+Biblioteca para gerenciar os log que são mostrados na tela ou no arquivo log.log. Essa biblioteca realiza a leitura de suas configurações no arquivo configLog.conf. Esse arquivo foi explicado na \autoref{subsec:ConfiguracesMonitorWeb-CliConfigFile}.
+
+\subsubsection{SystemData}
+
+Biblioteca responsável por gerenciar data e hora da aplicação. Ela é utilizada pela SystemLog para registrar o instante de cada registro.
+
+\subsubsection{ConfigFile}
+
+Biblioteca responsável por realizar a leitura e escrita de arquivos com a estrutura "chave e valor" no HD. Essa biblioteca é utilizado por diversas classes na aplicação, entre ela esta a ServidorConfig que realiza a leitura do arquivo configFile.conf e depois a escrita. 
+
+\subsubsection{Resource}
+
+Biblioteca responsável por criar a requisição HTTP e realizar a comunicação com o MonitoreWeb-Api utilizando-se o protocolo TCP. Ele pode ser utilizado tanto para obter informações no servidor (GET) quanto para enviar requisições (POST). 
+
+\subsection{Diagrama de Sequencia}\label{subsec:executandoMonitorWeb-clie}
+
+Na \autoref{Img:MonitorWeb-Cli-DiagramaDeSequencia} mostra-se um diagrama de sequencia, continuado na  \autoref{Img:MonitorWeb-Cli-DiagramaDeSequencia2}. Esse diagrama possui quatro "linhas de vida"  representando, respectivamente, o servidor Linux, o MonitorWeb-Cli, o MonitorWeb-Api e o banco de dados.
+
+Cabe observar que as setas com ponta fechada representam uma transação síncrona, as de ponta aberta representam transações assíncronas ou a criação de \textit{thread}, e as de pontas abertas e pontilhada representam um retorno.
+
+Todos os métodos mostradas na \autoref{Img:MonitorWeb-Cli-DiagramaDeSequencia} e na \autoref{Img:MonitorWeb-Cli-DiagramaDeSequencia2} foram mostrados na \autoref{subsec:DiagramaDeClassesMonitorwebcli}. 
+
+Na lista a seguir é descrito as relações entre cada uma das "linhas de vida" das aplicações.
+
+\begin{itemize}
+	\item Relação 1: assim que iniciada a aplicação, é chamado o método lerConfigLog para realizar a leitura das configurações do log, como pode ser visto na \autoref{subsubsec:ConfiguracesMonitorWeb-CliConfiglog}.
 	
-	%width=0.5\textwidth (Tamanho da Imagem)
+	\item Relação 2: o método lerConfiguracoesLocais realiza a leitura do arquivo lerConfigFile e configura o principal objeto da aplicação, o ServidorConfig. Mais detalhes sobre o arquivo pode ser visto na \autoref{subsubsec:ConfiguracesMonitorWeb-CliConfigfile}.
+	
+	\item Relação 3: neste momento uma \textit{thread} é criada deixando duas execuções em paralelo na aplicação. A nova \textit{thread} entrara em um \textit{loop} que ira durar até a aplicação ser encerada e a \textit{thread} antiga ira para a Relação 6.
+	
+	\item Relação 4 à 5: essa \textit{thread} tem a finalidade de atualizado o objeto ServidorConfig com os valores mais atuais do MonitorWeb-Api. Assim que ela é iniciada uma consulta (GET) é feita para o sistema servidor, que por sua vez solicita os valores para o banco de dados e devolve o resultado para o sistema cliente.
+	
+	\item Relação 6 e 11: essas relaçãos efetuam as leituras das informações do \textit{hardware} e enviam essas informações para o sistema servidor, que responde com um json contendo o objeto já persistido no banco de dados.
+	
+	\item Relação 12 à 20: nessas relações são criadas três novas \textit{threads} que se repetem até a aplicação ser encerada pelo usuário. Essas \textit{threads} são criadas para monitorarem CPU memória e \textit{swap}, elas realizam a leitura dos dados e enviam as informações para o sistema servidor realizar a persistência.
+	
+	\item Relação 21: é criado uma \textit{thread} para o monitoramento das informações do banco de dados.
+	
+	\item Relação 22 e 23: é realizada uma solicitado HTTP para o servidor, que por sua vez retorna um JSON contendo um vetor de objetos da classe MonitoramentoPostgresInformacoes. Esse vetor é percorrido e para cada objeto é criado uma \textit{thread}.
+	
+	\item Relação 24 e 25: é realizado leitura do arquivo de configurações do PostgreSQL (postgresql.conf), e seus valores são enviados para o servidor realizar a percistencia dos dados.
+	
+	\item Relação 26 e 27: é realizada uma solicitado HTTP para o servidor, que por sua vez retorna um JSON contendo um vetor de objetos da classe MonitoramentoPostgresDb. Esse vetor é percorrido e para cada objeto é criado uma \textit{thread}.
+	
+	\item Relação 28 e 30: é realizada as rotinas de \textit{backup} e \textit{vacuum}. Após o término, é enviada uma mensagem para o servidor informando se o procedimento foi nem sucedido ou não.
+	
+	\item loop: a \textit{thread} fica parada para que o sistema continue em execução.
+	
+
+\end{itemize}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1.0\textwidth]{figuras/diagramaSequencia1.jpg}
+	\caption[Diagrama se sequencia da aplicação MonitorWeb-Cli parte 1.]{Diagrama se sequencia da aplicação MonitorWeb-Cli parte 1.}
+	\label{Img:MonitorWeb-Cli-DiagramaDeSequencia}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1.0\textwidth]{figuras/diagramaSequencia2.jpg}
+	\caption[Diagrama se sequencia da aplicação MonitorWeb-Cli parte 2.]{Diagrama se sequencia da aplicação MonitorWeb-Cli parte 2.}
+	\label{Img:MonitorWeb-Cli-DiagramaDeSequencia2}
 \end{figure}
 
 

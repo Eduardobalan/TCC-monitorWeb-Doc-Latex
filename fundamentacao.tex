@@ -12,30 +12,36 @@
 
 \chapter{Fundamentação Teórica}\label{cap:funTeorica}
 
-Neste Capítulo são apresentados os conceitos utilizados neste trabalho de acordo com a literatura estudada. Na seção \ref{sec:ArquiteturaClienteServidor} explica-se os conceitos da arquitetura cliente-servidor. Na Seção \ref{sec:WebServices} explicasse os conceitos de um \textit{web-service}. Na Seção \ref{sec:BancodeDados} explica-se o conceito de Banco de Dados. Na Seção \ref{sec:Http} explica-se o conceito do protocolo HTTP/1.1 seus métodos forma de utilização e respostas esperadas. Na Seção \ref{sec:ArquiteturaReST} é apresentada o estilo de desenvolvimento da arquitetura ReST e na Seção \ref{sec:TestesAutomatizados} são mostradas as principais vantagens e melhorias adquiridas por meio dos testes automatizados.
+Neste Capítulo são apresentados os conceitos utilizados neste trabalho de acordo com a literatura estudada. Na seção \ref{sec:ArquiteturaClienteServidor} explica-se os conceitos da arquitetura cliente-servidor. Na Seção \ref{sec:WebServices} explicasse os conceitos de um \textit{web-service}. Na Seção \ref{sec:Http} explica-se sobre o protocolo HTTP/1.1 seus métodos forma de utilização e respostas esperadas. Na Seção \ref{sec:ArquiteturaReST} é apresentada o estilo de desenvolvimento da arquitetura ReST e na Seção \ref{sec:TestesAutomatizados} são mostradas as principais vantagens e melhorias adquiridas por meio dos testes automatizados.
 
 
 \section{Arquitetura Cliente-Servidor}\label{sec:ArquiteturaClienteServidor}
 
-		Em uma arquitetura cliente-servidor há um hospedeiro sempre em funcionamento, denominado servidor, que atende à requisições de muitos outros hospedeiros, denominados clientes. Estes podem estar em funcionamento esporadicamente ou a todo o tempo. Um exemplo clássico é a aplicação \textit{web} na qual um servidor \textit{web} que está sempre em funcionamento atende à requisições de \textit{browsers} de hospedeiros clientes. Ao receber uma requisição de um objeto de um hospedeiro cliente, o servidor \textit{web} responde enviando o objeto requisitado a ele. Observe que, na arquitetura cliente-servidor, os clientes não se comunicam diretamente uns com os outros: por exemplo, na aplicação \textit{web}, dois \textit{browsers} não se comunicam diretamente. Outra característica da arquitetura cliente-servidor é que o servidor tem um endereço fixo, bem conhecido, denominado endereço IP (\textit{Internet Protocol}). Devido a esse característica do servidor e devido ao fato de ele estar sempre em funcionamento, um cliente sempre pode contatá-lo enviando um pacote ao endereço do servidor. Algumas das aplicações mais conhecidas que empregam a arquitetura cliente-servidor são \textit{web}, FTP (\textit{File Transfer Protocol}), Telnet e e-mail. Essa arquitetura cliente-servidor é mostrada na \autoref{Img:ArquiteturaClienteServidor} em que diversos clientes utilizando, computadores, notebooks e celulares realizam comunicação com um servidor \cite{Kurose:2010}.
+Em uma arquitetura cliente-servidor há um hospedeiro sempre em funcionamento, denominado servidor, que atende à requisições de muitos outros hospedeiros, denominados clientes. Estes podem estar em funcionamento esporadicamente ou a todo o tempo. Um exemplo clássico é a aplicação \textit{web} na qual um servidor \textit{web} que está sempre em funcionamento atende à requisições de \textit{browsers} (navegador de Internet) de hospedeiros clientes. Ao receber uma requisição de um objeto de um hospedeiro cliente, o servidor \textit{web} responde enviando o objeto requisitado a ele. Observe que, na arquitetura cliente-servidor, os clientes não se comunicam diretamente uns com os outros: por exemplo, na aplicação \textit{web}, dois \textit{browsers} não se comunicam diretamente. Outra característica da arquitetura cliente-servidor é que o servidor tem um endereço fixo, bem conhecido, denominado endereço IP (\textit{Internet Protocol}). Devido a esse característica do servidor e devido ao fato de ele estar sempre em funcionamento, um cliente sempre pode contatá-lo enviando um pacote ao endereço do servidor. Algumas das aplicações mais conhecidas que empregam a arquitetura cliente-servidor são \textit{web}, FTP (\textit{File Transfer Protocol}), Telnet e e-mail. Essa arquitetura cliente-servidor é mostrada na \autoref{Img:ArquiteturaClienteServidor} em que diversos clientes utilizam, computadores, notebooks e celulares realizam comunicação com um servidor \cite{Kurose:2010}.
 
-Em aplicações cliente-servidor, muitas vezes acontece de um único hospedeiro servidor ser incapaz de atender a todas as requisições de seus clientes. Um site \textit{web} pode ficar rapidamente saturado se tiver apenas um servidor para atender grande número de requisições. Por essa razão, um grande conjunto de hospedeiros - às vezes coletivamente chamados \textit{data center} - freqüentemente é usado para criar um servidor virtual poderoso em arquitetura cliente-servidor, aumentando a capacidade de resposta de requisições \cite{Kurose:2010}.
+Em aplicações cliente-servidor, muitas vezes acontece de um único hospedeiro servidor ser incapaz de atender a todas as requisições de seus clientes. Um site \textit{web} pode ficar rapidamente saturado se tiver apenas um servidor para atender grande número de requisições. Por essa razão, um grande conjunto de hospedeiros às vezes coletivamente chamados \textit{data center} frequentemente é usado para criar um servidor virtual poderoso em arquitetura cliente-servidor, aumentando a capacidade de resposta de requisições \cite{Kurose:2010}.
 
 
 \begin{figure}
 	\centering
 	\includegraphics[width=0.5\textwidth]{figuras/KuroseClienteServidorpg88.jpg}
-	\caption[Arquitetura Cliente-Servidor.]{Representa a arquitetura clitente-Servidor, onde diversos tipos de cliente se comunicam com um mesmo servidor.}
+	\caption[Arquitetura Cliente-Servidor.]{Representa a arquitetura cliente-servidor, onde diversos tipos de clientes se comunicam com um mesmo servidor \cite{Kurose:2010}.}
 	\label{Img:ArquiteturaClienteServidor}
 \end{figure}
 
 
 \section{\textit{Web Services}}\label{sec:WebServices}
 
+O \textit{Web Service} é um \textit{software} que atende a uma função de negócio específica para seus clientes. Conforme mostrado na \autoref{Img:WebService}, um \textit{web service} recebe requisições de clientes e as responde ocultando todo o detalhamento do seu processamento. Este processamento geralmente envolve consultas a base de dados. Normalmente as transações estão em formato XML (\textit{Extended Markup Language}) ou JSON (\textit{JavaScript Object Notation}), e são transmitidas utilizando o protocolo HTTP (\textit{HyperText Transfer Protocol}), entretanto podem ser utilizados outros protocolos de transporte \cite{Sampaio:2003}.
 
-O \textit{Web Service} é um \textit{software}  que atende a uma função de negócio específica para seus clientes. Ele recebe requisições de clientes e as responde ocultando todo o detalhamento do seu processamento. Normalmente as transações estão em formato XML (\textit{Extended Markup Language}), e são transmitidas utilizando o protocolo HTTP (\textit{HyperText Transfer Protocol}), entretanto podem ser utilizados outros protocolos de transporte \cite{Sampaio:2003}.
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.5\textwidth]{figuras/webService.jpg}
+	\caption[Web Service]{Web Service. Aplicações clientes enviam os dados por meio de requisições HTTP, requisitando uma informação ou enviando dados para serem armazenados em uma base de dados. O \textit{web service} processa a requisição e retorna os dados em formato XML/JSON.}
+	\label{Img:WebService}
+\end{figure}
 
-Os \textit{Web Services}, aliados aos padrões estabelecidos da Internet, podem fazer com que os dados fluam entre as várias entidades, como o governo e empresas interagindo entre si, reduzindo custos de modo a possibilitar maior facilidade e rapidez na troca de informações \cite{Abinader:2006}. Um exemplo utilizado nacionalmente é a NF-e (Nota Fiscal Eletrônica) em que diversas empresas com \textit{softwares} diferentes enviam arquivos XML utilizando o protocolo https (\textit{Hyper Text Transfer Protocol Secure}) para o \textit{web service} da receita federal, aguardam a realização dos processamentos de validação e recebem um arquivo XML de retorno com as informações desejadas.
+Os \textit{web wervices}, aliados aos padrões estabelecidos da Internet, podem fazer com que os dados fluam entre as várias entidades, como o governo e empresas interagindo entre si, reduzindo custos de modo a possibilitar maior facilidade e rapidez na troca de informações \cite{Abinader:2006}. Um exemplo utilizado nacionalmente é a NF-e (Nota Fiscal Eletrônica) em que diversas empresas com \textit{softwares} diferentes enviam arquivos XML utilizando o protocolo https (\textit{Hyper Text Transfer Protocol Secure}) para o \textit{web service} da receita federal, aguardam a realização dos processamentos de validação e recebem um arquivo XML de retorno com as informações desejadas \cite{nfe:2006}.
 
 Um \textit{web wervice} deve executar unidades completas de trabalho, não dependendo do estado de outros componentes externos. Outra definição importante é que eles devem ser "\textit{Stateless}" ou seja, cada requisição é considerada uma transação independente que não está relacionada a qualquer requisição anterior de forma que a comunicação consista de pares de requisição e resposta independentes \cite{Sampaio:2003, W3C:2001}.
 
@@ -48,7 +54,7 @@ Na utilização do protocolo HTTP/1.1 todos os clientes e todos os servidores de
 
 \subsection{Conexões} \label{HTTP/1.1 - HyperText Transfer Protocol}
 
-O modo habitual de cliente entrar em contato com um servidor é estabelecer uma conexão TCP (\textit{Transmission Control Protocol}) para a porta 80 da máquina servidora, embora esse procedimento não seja exigido formalmente. A vantagem de se usar o TCP é que ambas as partes não têm de se preocupar com mensagens perdidas, mensagens duplicadas, mensagens longas ou confirmações. Todos esses assuntos são tratados pela implementação do TCP \cite{Tanenbaum:2003}.
+O modo habitual do cliente entrar em contato com um servidor é estabelecer uma conexão TCP (\textit{Transmission Control Protocol}) para a porta 80 da máquina servidora, embora esse procedimento não seja exigido formalmente. A vantagem de se usar o TCP é que ambas as partes não têm de se preocupar com mensagens perdidas, mensagens duplicadas, mensagens longas ou confirmações. Todos esses assuntos são tratados pela implementação do TCP \cite{Tanenbaum:2003}.
 
 O HTTP/1.1 diferentemente de seus antecessores, admite conexões persistentes. Com elas, é possível estabelecer uma conexão TCP, enviar uma solicitação e obter uma resposta, e depois enviar solicitações adicionais e receber respostas adicionais. Amortizando o custo da instalação e da liberação do TCP por várias solicitações, o processamento relativo devido ao TCP é muito menor por solicitação. Também é possível transportar as solicitações por \textit{pipeline}, ou seja, enviar a segunda solicitação antes de chegar a resposta da primeira \cite{Tanenbaum:2003}.
 
@@ -59,9 +65,7 @@ O HTTP/1.1 diferentemente de seus antecessores, admite conexões persistentes. C
 O HTTP foi criado de modo mais geral que simplesmente para utilização na \textit{web}, visando às futuras aplicações orientadas a objetos. Por essa razão, são aceitas operações chamadas métodos, diferentes da simples solicitação de uma página da \textit{web}. Cada solicitação consiste em uma ou mais linhas de texto ASCII, sendo a primeira palavra da primeira linha o nome do método solicitado. Os métodos internos estão listados na \autoref{Tab:MetodosHTTP} \cite{Tanenbaum:2003}.
 
 
-% Please add the following required packages to your document preamble:
-% \usepackage[table,xcdraw]{xcolor}
-% If you use beamer only pass "xcolor=table" option, i.e. \documentclass[xcolor=table]{beamer}
+
 \begin{table}[!ht]
 \centering
 \begin{tabular}{|l|l|}
@@ -70,18 +74,18 @@ O HTTP foi criado de modo mais geral que simplesmente para utilização na \text
 \\ \hline
 GET                                    & \multicolumn{1}{p{13.50cm}|}{O método GET solicita ao servidor que envie a página (ou objeto, no caso mais genérico; na prática,apenas um arquivo). A grande maioria das solicitações a servidores da \textit{web} tem a forma de métodos GET.} 
 \\ \hline
-HEAD                                   & \multicolumn{1}{p{13.50cm}|}{O método HEAD solicita apenas o cabeçalho da mensagem, sem a página propriamente dita. Essemétodo pode ser usado para se obter a data da última modificação feita na ágina, para reunirinformações destinadas à indexação, ou apenas para testar a validade de um URL(Uniform Resource Locator).}
+HEAD                                   & \multicolumn{1}{p{13.50cm}|}{O método HEAD solicita apenas o cabeçalho da mensagem, sem a página propriamente dita. Esse método pode ser usado para se obter a data da última modificação feita na ágina, para reunir informações destinadas à indexação, ou apenas para testar a validade de um URL(\textit{Uniform Resource Locator}).}
 \\ \hline
 PUT                                    & \multicolumn{1}{p{13.50cm}|}{O método PUT grava em uma página já existe. Esse método possibilita a criação de um conjunto de páginas da \textit{web} em um servidor remoto. O corpo da solicitação contém a página. } 
 \\ \hline
-POST                                   & \multicolumn{1}{p{13.50cm}|}{O método POST grava novos dados e são "anexados" a ele, em um sentido mais genérico\cite{Tanenbaum:2003}.} 
+POST                                   & \multicolumn{1}{p{13.50cm}|}{O método POST grava novos dados e são "anexados" a ele, em um sentido mais genérico.} 
 \\ \hline
-DELETE                                 & \multicolumn{1}{p{13.50cm}|}{O método DELETE exclui a página. Não há garantia de que DELETE tenha sido bem-sucedido pois, mesmo que oservidor HTTP remoto esteja pronto para excluir a página, o arquivo subjacente pode ter um modoque impeça o servidor HTTP de modificá-lo ou excluí-lo \cite{Tanenbaum:2003}. }
+DELETE                                 & \multicolumn{1}{p{13.50cm}|}{O método DELETE exclui a página. Não há garantia de que DELETE tenha sido bem-sucedido pois, mesmo que o servidor HTTP remoto esteja pronto para excluir a página, o arquivo subjacente pode ter um modo que impeça o servidor HTTP de modificá-lo ou excluí-lo. }
 \\ \hline
-TRACE                                  & \multicolumn{1}{p{13.50cm}|}{O método TRACE serve para depuração. ele instrui o servidor a enviar de volta a solicitação. Essemétodo é útil quando as solicitações não estão sendo processadas corretamente e o cliente desejasaber qual solicitação o servidor recebeu de fato \cite{Tanenbaum:2003}.}   
+TRACE                                  & \multicolumn{1}{p{13.50cm}|}{O método TRACE serve para depuração. Ele instrui o servidor a enviar de volta a solicitação. Esse método é útil quando as solicitações não estão sendo processadas corretamente e o cliente deseja saber qual solicitação o servidor recebeu de fato.}   
 \\ \hline
-CONNECT                                & \multicolumn{1}{p{13.50cm}|}{O método CONNECT não é usado atualmente. Ele é reservado para uso futuro \cite{Tanenbaum:2003}.} \\ \hline
-OPTIONS                                & \multicolumn{1}{p{13.50cm}|}{O método OPTIONS fornece um meio para que o cliente consulte o servidor sobre suas propriedades ou sobre as de um arquivo específico \cite{Tanenbaum:2003}.}
+CONNECT                                & \multicolumn{1}{p{13.50cm}|}{O método CONNECT não é usado atualmente. Ele é reservado para uso futuro.} \\ \hline
+OPTIONS                                & \multicolumn{1}{p{13.50cm}|}{O método OPTIONS fornece um meio para que o cliente consulte o servidor sobre suas propriedades ou sobre as de um arquivo específico.}
 \\ \hline
 \end{tabular}
 \caption[Métodos da solicitações HTTP.]{Métodos da solicitações HTTP e suas descrições \cite{Tanenbaum:2003}.}
@@ -96,35 +100,31 @@ OPTIONS                                & \multicolumn{1}{p{13.50cm}|}{O método 
 
 Toda solicitação obtém uma resposta que consiste em uma linha de status e, possivelmente,
 informações adicionais (por exemplo, uma página da \textit{web} ou parte dela). A linha de status contém
-um código de status de três dígitos informando se a solicitação foi atendida e, se não foi, o motivo. 
+um código de status de três dígitos informando se a solicitação foi atendida, e se não foi, o motivo. 
 O primeiro dígito é usado para dividir as respostas em cinco grupos importantes, como mostra-se na \autoref{Tab:FalhasHTTP} \cite{Tanenbaum:2003}.
 
 
-% Please add the following required packages to your document preamble:
-% \usepackage[table,xcdraw]{xcolor}
-% If you use beamer only pass "xcolor=table" option, i.e. \documentclass[xcolor=table]{beamer}
 \begin{table}[!h]
 \centering
-%\caption{My caption}
+
 \begin{tabular}{|l|l|}
 \hline
-%\multicolumn{1}{|c|}{{\color[HTML]{000000} \textbf{Código}}} & \multicolumn{1}{c|}{{\color[HTML]{000000} \textbf{Descrição}}}    \\ \hline
 \textbf{Código}   & \textbf{Descrição}       																						 \\ \hline
-1xx   & Raramente são usados na prática \cite{Tanenbaum:2003}.        																						 \\ \hline
-2xx   & Solicitação foi tratada com sucesso \cite{Tanenbaum:2003}.            																		 \\ \hline
+1xx   & Raramente são usados na prática.        																						 \\ \hline
+2xx   & Solicitação foi tratada com sucesso.            																		 \\ \hline
 3xx   & \begin{tabular}[c]{@{}l@{}}Informam ao cliente que ele deve procurar em outro lugar, 
-				\\ usando uma URL diferente \cite{Tanenbaum:2003}.\end{tabular} 																						\\ \hline
+				\\ usando uma URL diferente.\end{tabular} 																						\\ \hline
 4xx   & \begin{tabular}[c]{@{}l@{}}Solicitação falhou devido a um erro do cliente,
-				\\ como uma solicitação inválida ou uma página inexistente \cite{Tanenbaum:2003}.\end{tabular}             \\ \hline
+				\\ como uma solicitação inválida ou uma página inexistente.\end{tabular}             \\ \hline
 5xx   & \begin{tabular}[c]{@{}l@{}}O próprio servidor tem um problema, seja causado por um  
-				\\ erro em seu código ou por uma sobrecarga temporária \cite{Tanenbaum:2003}.\end{tabular}                  \\ \hline
+				\\ erro em seu código ou por uma sobrecarga temporária.\end{tabular}                  \\ \hline
 \end{tabular}
 \caption[Códigos de resposta da solicitação HTTP.]{Códigos de resposta da solicitação HTTP \cite{Tanenbaum:2003}.}
 \label{Tab:FalhasHTTP}
 \end{table}
 
 
-\subsection{Exemplo de utilização do HTTP/1.1} \label{subsec:ExemploHttp}
+\subsection{Exemplo de Utilização do HTTP/1.1} \label{subsec:ExemploHttp}
 
 Este protocolo foi desenvolvido de maneira a ser o mais flexível possível para comportar diversas necessidades diferentes.
 Sempre que uma requisição é enviada ela segue o formato da requisições que pode ser visto no \autoref{Func:GETModelo} \cite{Saudate:2014}.
@@ -137,7 +137,7 @@ Sempre que uma requisição é enviada ela segue o formato da requisições que 
 \end{lstlisting}
 
 
-Quando um GET para \url{http://www.site.com.br/clientes} é realizado uma requisição é criada como pode ser visto no \autoref{Func:GETExemplo}. Nesta requisição pode ser visto em sua primeira linha o método GET da solicitação seguido pela URL a qual está sendo feito a solicitação e pela versão do protocolo HTTP. O servidor responsável por receber a solicitação e a porta são passado no cabeçalho da requisição precedido pela palavra Host. Na terceira linha pode ser visto um cabeçalho \textit{Accept}, que serve para informar ao servidor qual tipo de dados a requisição espera receber \cite{Saudate:2014}.
+Quando um GET para \url{http://www.site.com.br/clientes} é realizado uma requisição é criada como pode ser visto no \autoref{Func:GETExemplo}. Nesta requisição pode ser visto em sua primeira linha o método GET da solicitação seguido pela URL a qual está sendo feito a solicitação e pela versão do protocolo HTTP. O servidor responsável por receber a solicitação e a porta são passados no cabeçalho da requisição precedido pela palavra \textit{Host}. Na terceira linha pode ser visto um cabeçalho \textit{Accept}, que serve para informar ao servidor qual tipo de dados a requisição espera receber \cite{Saudate:2014}.
 
 
 \begin{lstlisting}[label=Func:GETExemplo,caption={[Exemplo de uma requisição HTTP utilizando o método GET.]Exemplo de uma solicitação HTTP utilizando o método GET, para \url{http://www.site.com.br/clientes} com o pedido de uma arquivo XML de resposta.}]
@@ -187,7 +187,7 @@ Content-Length: 232
 
 Os princípios básicos de ReST (\textit{Representational State Transfer}) são estilos de desenvolvimento
 de \textit{web services} que teve origem na tese de doutorado de Roy Fielding. 
-Este, por sua vez, é co-autor de um dos protocolos mais utilizados no mundo, o HTTP/1.1 (\textit{HyperText Transfer Protocol}) \cite{Boagrio:2017} \cite{Saudate:2014}.  
+Este, por sua vez, é co-autor de um dos protocolos mais utilizados no mundo, o HTTP/1.1 (\textit{HyperText Transfer Protocol}) \cite{Boagrio:2017,Saudate:2014}.  
 Assim, é notável que o protocolo ReST é guiado pelo que seriam as boas práticas de uso do HTTP/1.1 \cite{Saudate:2014}:
 
 
@@ -204,12 +204,10 @@ Note que as URLs seguem uma estrutura hierárquica, ou seja, o elemento seguinte
 
 Todo desenvolvedor de software já escreveu um trecho de código que não funcionava. E muitas vezes só descobriu que o código não funciona quando o cliente reporta o \textit{bug}. Nesse momento o desenvolvedor perde confiança no código, e seu cliente perde a confiança na equipe de desenvolvimento \cite{Aniche:2015}.
 
-Uma maneira para conseguir testar o sistema todo de maneira constante e contínua é automatizando os testes. Ou seja, escrevendo um programa que testa o seu programa. Esse programa invocaria os comportamentos do seu sistema e garantiria que a saída é sempre a esperada. Se isso for feito, teríamos diversas vantagens. O teste executaria muito rápido (afinal, é uma máquina!). Se ele executa rápido, logo ele seria rodado constantemente. Se for rodado constantemente, os problemas serão encontrados mais cedo. \cite{Aniche:2012}.
+Uma maneira para conseguir testar o sistema todo de maneira constante e contínua é automatizando os testes. Ou seja, escrevendo um programa que teste o seu programa. Esse programa invoca os comportamentos do sistema testado e garante que a saída seja sempre a esperada. Se isso for feito, tem-se diversas vantagens, pois o teste é executado muito rápido, uma vez que em um único segundo, uma maquina de 2GHz, por exemplo, executa mais de 2 bilhões de \textit{clocks}. Se a execução é rápida, logo o sistema será rodado constantemente. Se for rodado constantemente, os problemas são encontrados mais cedo. \cite{Aniche:2012}.
 
 \subsection{Testes de Unidade}\label{Testes Automatizados}
 
 Um teste de unidade não se preocupa com todo o sistema; ele está interessado apenas em saber se uma pequena parte do sistema funciona. Ele testa uma única unidade do nosso sistema. Geralmente, em sistemas orientados a objetos, essa unidade é a classe.
 
 Testes automatizados são fundamentais para um desenvolvimento de qualidade. Sua existência traz diversos benefícios para o software, como o aumento da qualidade e a diminuição de \textit{bugs} em produção \cite{Aniche:2012}
-
-
